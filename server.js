@@ -2,6 +2,10 @@ const express = require('express');
 const app = express();
 app.use(express.static('public'));
 
+app.get('/', (req, res) => {
+  res.send('you have reached the home page');
+});
+
 function runServer() {
     const port = process.env.PORT || 8080;
     return new Promise((resolve, reject) => {
