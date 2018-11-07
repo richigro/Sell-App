@@ -1,9 +1,9 @@
 const express = require('express');
 const app = express();
-app.use(express.static('public', {index: false}));
+app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-  res.send('you have reached the home page');
+  res.send("hello");
 });
 
 function runServer() {
