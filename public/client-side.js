@@ -36,3 +36,8 @@ const MOCK_ITEMS_ON_SALE = {
     ]
 };
 
+function app() {
+    alert("hi");
+}
+
+$(app());
