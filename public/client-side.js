@@ -40,11 +40,15 @@ function renderView(view){
     $(".js-app-container").append(view);
 }
 
+function deleteView() {
+    $(".js-app-container").empty();
+}
+
 // renders the home page takes data from api
 function homePage(data){
     return `
         <main role="main">
-            <div class="item">
+            <div class="js-item item">
                 <h1>${data.itemsOnSale[0].title}</h1>
                 <img src="#" />
                 <p>short description</p>
@@ -74,15 +78,18 @@ function productDetailPage(){
 }
 
 
-function loginOrSignUp(){
-    $(".js-login-page").on("click", ".js-app-container", (event) => {
-        console.log("login button clicked!");
+function showItemDetail(){
+    $(".js-app-container").on("click", ".js-item", (event) => {
+        // deletes what is on current view
+        deleteView();
+        // loads new view
+        renderView(productDetailPage());
     });
 }
 function app() {
     // renders home page few items on sale
     renderView(homePage(MOCK_ITEMS_ON_SALE));
-    loginOrSignUp();
+    showItemDetail();
 }
 
 $(app());
