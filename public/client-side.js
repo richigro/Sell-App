@@ -35,9 +35,29 @@ const MOCK_ITEMS_ON_SALE = {
         }
     ]
 };
+// appends a view to the app
+function renderView(view){
+    $(".js-app-container").append(view);
+}
+
+// renders the home page takes data from api
+function homePage(data){
+    return `
+        <main role="main">
+            <div class="item">
+                <h1>${data.itemsOnSale[0].title}</h1>
+                <img src="${data.itemsOnSale[0].title}" />
+                <p>short description</p>
+            </div>
+        </main>
+        <footer role="contentinfo">
+
+        </footer>`;
+}
 
 function app() {
-    alert("hi");
+    // renders home page few items on sale
+    renderView(homePage(MOCK_ITEMS_ON_SALE));
 }
 
 $(app());
