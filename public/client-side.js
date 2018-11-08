@@ -46,7 +46,7 @@ function homePage(data){
         <main role="main">
             <div class="item">
                 <h1>${data.itemsOnSale[0].title}</h1>
-                <img src="${data.itemsOnSale[0].title}" />
+                <img src="#" />
                 <p>short description</p>
             </div>
         </main>
@@ -54,10 +54,15 @@ function homePage(data){
 
         </footer>`;
 }
-
+function loginOrSignUp(){
+    $(".js-login-page").on("click", ".js-app-container", (event) => {
+        console.log("login button clicked!");
+    });
+}
 function app() {
     // renders home page few items on sale
     renderView(homePage(MOCK_ITEMS_ON_SALE));
+    loginOrSignUp();
 }
 
 $(app());
