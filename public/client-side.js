@@ -77,6 +77,13 @@ function productDetailPage(){
     `;
 }
 
+function homeButton(){
+    $(".js-app-container").on("click", ".js-home-button", (event) => {
+        deleteView();
+        renderView(homePage(MOCK_ITEMS_ON_SALE));
+    });
+}
+
 
 function showItemDetail(){
     $(".js-app-container").on("click", ".js-item", (event) => {
@@ -90,6 +97,7 @@ function app() {
     // renders home page few items on sale
     renderView(homePage(MOCK_ITEMS_ON_SALE));
     showItemDetail();
+    homeButton();
 }
 
 $(app());
