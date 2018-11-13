@@ -86,7 +86,9 @@ function loginPage() {
 
 function loginButton() {
     $(".js-login-page").on("click", (event) => {
-        console.log("why not");
+        console.log("hi");
+        deleteView();
+        renderView(loginPage());
     });
 }
 
