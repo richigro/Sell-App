@@ -1,3 +1,5 @@
+"use strict";
+
 const MOCK_ITEMS_ON_SALE = {
     "itemsOnSale": [
         {
@@ -53,7 +55,7 @@ function homePage() {
 // renders the home page takes data from api
 function itemList(item){
     return `
-        <div class="js-item item-container">
+        <div class="js-item item-container" id=${item.id}>
             <h1 class="item-title">${item.title}</h1>
             <img class="item-img-home" src="https://i03.hsncdn.com/is/image/HomeShoppingNetwork/prodgrid230/janome-15-stitch-color-me-sewing-machine-standard-d-2018012314022664~597747_RNR.jpg" />
             <p class="item-desc">${item.description}</p>
@@ -81,8 +83,20 @@ function productDetailPage(item){
 function homeButton(){
     $(".js-app-container").on("click", ".js-home-button", (event) => {
         deleteView();
-        renderView(homePage(MOCK_ITEMS_ON_SALE));
+        homePage();
     });
+}
+
+function findItemById(itemList, itemId) {
+    let foundItem = {};
+    itemList.forEach((item) => {
+        for(let keyId in item) {
+            if(item[keyId] === itemId) {
+                foundItem = item;
+            }
+        }
+    });
+    return foundItem;
 }
 
 
@@ -90,10 +104,13 @@ function showItemDetail(){
     $(".js-app-container").on("click", ".js-item", (event) => {
         // deletes what is on current view
         deleteView();
-        console.log((event.target).closest(".id"));
-        // const selectedItem = 
+        const itemId = ((event.target).closest("div").id).toString();
+        // console.log(typeof itemId);
+        const allItems = MOCK_ITEMS_ON_SALE.itemsOnSale;
+        // console.log(allItems);
+        const selectedItem = findItemById(allItems, itemId); 
         // loads new view
-        renderView(productDetailPage());
+        renderView(productDetailPage(selectedItem));
     });
 }
 function app() {
