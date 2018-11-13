@@ -47,16 +47,12 @@ function deleteView() {
 // renders the home page takes data from api
 function homePage(data){
     return `
-        <main role="main">
-            <div class="js-item item">
+            <div class="js-item item-container">
                 <h1>${data.itemsOnSale[0].title}</h1>
-                <img src="#" />
+                <img class="item-img-home" src="https://i03.hsncdn.com/is/image/HomeShoppingNetwork/prodgrid230/janome-15-stitch-color-me-sewing-machine-standard-d-2018012314022664~597747_RNR.jpg" />
                 <p>short description</p>
             </div>
-        </main>
-        <footer role="contentinfo">
-
-        </footer>`;
+            `;
 }
 
 function productDetailPage(){
