@@ -4,7 +4,7 @@ const MOCK_ITEMS_ON_SALE = {
             "id": "1111111",
             "title": "Sewing Machine",
             "price": "100",
-            "description": "John Doe",
+            "description": "This is a really good sewing machine",
             "contact": {
                 "phone": "+210123578",
                 "email": "asdf@asdf.com"
@@ -46,13 +46,15 @@ function deleteView() {
 
 // renders the home page takes data from api
 function homePage(data){
-    return `
-            <div class="js-item item-container">
-                <h1>${data.itemsOnSale[0].title}</h1>
+    data.itemsOnSale.map((item) => {
+            `<div class="js-item item-container">
+                <h1 class="item-title">${item.title}</h1>
                 <img class="item-img-home" src="https://i03.hsncdn.com/is/image/HomeShoppingNetwork/prodgrid230/janome-15-stitch-color-me-sewing-machine-standard-d-2018012314022664~597747_RNR.jpg" />
-                <p>short description</p>
+                <p class="item-desc">${item.description}</p>
             </div>
             `;
+    });
+            
 }
 
 function productDetailPage(){

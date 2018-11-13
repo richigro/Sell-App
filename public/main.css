@@ -18,9 +18,22 @@ body {
     margin: 10px auto;
     height: 200px;
     width: 80%;
-    background-color: green;
+    border: 1px solid black;
 }
+
+.item-title {
+    text-align: center;
+    font-size: 32px;
+}
+
 .item-img-home {
     width: 100px;
     height: 100px;
+    display: block;
+    margin: 5px auto;
 }
+ .item-desc {
+     padding: 3px;
+     font-size: 20px;
+     overflow: hidden;
+ }
