@@ -80,10 +80,23 @@ function productDetailPage(item){
     `;
 }
 
+function loginPage() {
+    return `<h1>Login Page coming soon..</h1>`;
+}
+
+function loginButton() {
+    $(".js-login-page").on("click", (event) => {
+        console.log("why not");
+    });
+}
+
 function homeButton(){
+    
+    // console.log("you say hi and i say..");
     $(".js-app-container").on("click", ".js-home-button", (event) => {
-        deleteView();
-        homePage();
+        console.log("Hello");
+        // deleteView();
+        // homePage();
     });
 }
 
