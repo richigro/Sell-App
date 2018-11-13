@@ -12,10 +12,10 @@ const MOCK_ITEMS_ON_SALE = {
             "publishedAt": 1470016976609
         }, 
         {
-            "id": "1111111",
-            "title": "Sewing Machine",
-            "price": "100",
-            "description": "John Doe",
+            "id": "1111112",
+            "title": "Computer",
+            "price": "700",
+            "description": "description fir second item",
             "contact": {
                 "phone": "+210123578",
                 "email": "asdf@asdf.com"
@@ -23,10 +23,10 @@ const MOCK_ITEMS_ON_SALE = {
             "publishedAt": 1470016976609
         },
         {
-            "id": "1111111",
-            "title": "Sewing Machine",
-            "price": "100",
-            "description": "John Doe",
+            "id": "1111113",
+            "title": "Cellphone",
+            "price": "400",
+            "description": "description for third item",
             "contact": {
                 "phone": "+210123578",
                 "email": "asdf@asdf.com"
@@ -44,20 +44,23 @@ function deleteView() {
     $(".js-app-container").empty();
 }
 
-// renders the home page takes data from api
-function homePage(data){
-    data.itemsOnSale.map((item) => {
-            `<div class="js-item item-container">
-                <h1 class="item-title">${item.title}</h1>
-                <img class="item-img-home" src="https://i03.hsncdn.com/is/image/HomeShoppingNetwork/prodgrid230/janome-15-stitch-color-me-sewing-machine-standard-d-2018012314022664~597747_RNR.jpg" />
-                <p class="item-desc">${item.description}</p>
-            </div>
-            `;
+function homePage() {
+    MOCK_ITEMS_ON_SALE.itemsOnSale.forEach((item) => {
+        renderView(itemList(item));
     });
-            
 }
 
-function productDetailPage(){
+// renders the home page takes data from api
+function itemList(item){
+    return `
+        <div class="js-item item-container">
+            <h1 class="item-title">${item.title}</h1>
+            <img class="item-img-home" src="https://i03.hsncdn.com/is/image/HomeShoppingNetwork/prodgrid230/janome-15-stitch-color-me-sewing-machine-standard-d-2018012314022664~597747_RNR.jpg" />
+            <p class="item-desc">${item.description}</p>
+        </div>`;    
+}
+
+function productDetailPage(item){
     return `
         <main role="main">
             <h1>Item title here</h1>
@@ -87,13 +90,15 @@ function showItemDetail(){
     $(".js-app-container").on("click", ".js-item", (event) => {
         // deletes what is on current view
         deleteView();
+        console.log((event.target).closest(".id"));
+        // const selectedItem = 
         // loads new view
         renderView(productDetailPage());
     });
 }
 function app() {
-    // renders home page few items on sale
-    renderView(homePage(MOCK_ITEMS_ON_SALE));
+    // renders home page few items for sale
+    homePage();
     showItemDetail();
     homeButton();
 }
