@@ -14,6 +14,16 @@ body {
     background-color: pink;
 
 }
+
+.logo {
+    font-size: 51px;
+    padding: 5px;
+    display: inline-block;
+    margin-left: 4px;
+    height: 60px;
+    width: 90%;
+}
+
 .item-container{
     margin: 10px auto;
     height: 200px;
@@ -26,6 +36,19 @@ body {
     font-size: 32px;
 }
 
+.app-links {
+    display: inline-block;
+    border: solid black 1px;
+    margin-right: 0;
+}
+
+.home-btn {
+    display: inline-block;
+    /* padding: 3px; */
+}
+.login-btn {
+    display: inline-block;
+}
 .item-img-home {
     width: 100px;
     height: 100px;
@@ -36,4 +59,17 @@ body {
      padding: 3px;
      font-size: 20px;
      overflow: hidden;
+ }
+
+ .sign-up-form {
+     width: 80%;
+     height: auto;
+     margin: 0 auto;
+     margin-top: 5%;
+     border: solid black 1px;
+ }
+
+ .sign-up-title-text{
+     text-align: center;
+     font-size: 32PX;
  }
