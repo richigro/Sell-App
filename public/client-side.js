@@ -167,6 +167,7 @@ function productDetailPage(item){
             </div>
             <div class="seller-info">
                 <h1>Contact Seller</h1>
+                <p>Seller: ${item.contact["seller"]}</p>
                 <p>email: ${item.contact["email"]}</p>
                 <p>phone: ${item.contact["phone"]}</p>
                 <p>Location: ${item.contact["location"]}</p>
