@@ -58,7 +58,7 @@ function itemList(item){
     return `
         <div class="js-item item-container" id=${item.id}>
             <h1 class="item-title">${item.title}</h1>
-            <img class="item-img-home" src="https://i03.hsncdn.com/is/image/HomeShoppingNetwork/prodgrid230/janome-15-stitch-color-me-sewing-machine-standard-d-2018012314022664~597747_RNR.jpg" />
+            <img class="item-img-home" src="https://atlas-content-cdn.pixelsquid.com/stock-images/gift-box-2M71J7E-600.jpg" />
             <p class="item-desc">${item.description}</p>
         </div>`;    
 }
