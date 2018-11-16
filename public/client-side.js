@@ -46,7 +46,7 @@ function deleteView() {
     $(".js-app-container").empty();
 }
 
-function homePage() {
+function showHomePage() {
     MOCK_ITEMS_ON_SALE.itemsOnSale.forEach((item) => {
         renderView(itemList(item));
     });
@@ -99,11 +99,12 @@ function loginPage() {
                 </label>
                 <p>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
                 <div class="clearfix">
-                    <button type="button" class="cancelbtn">Cancel</button>
-                    <button type="submit" class="signupbtn">Sign Up</button>
+                    <button type="button" class="js-cancel-btn">Cancel</button>
+                    
                 </div>
             </div>
         </form>
+        <button type="submit" class="js-signup-btn">Sign Up</button>
     </div>
   `;
 }
@@ -126,18 +127,52 @@ function generateAccountPage() {
                 <li class="user-post"></li>
             </ul>
         </div>
-        <button> Make a new post!</button>
+        <button class="js-make-a-post"> Make a new post!</button>
     </div>
     `;
 }
 
-function displayUserAccount() {
-    //delete current view
-    deleteView();
-    renderView(generateAccountPage());
+function newPostPage() {
+    return `
+        <div class="post-page">
+            <div class="item-descrition">
+                <form>
+                    <input type="text"/>
+                </form>
+            </div>
+            <div class="item-picture">
+                <img src="#" />
+            </div>
+            <div class="seller-info">
+                <h1>Seller Info</h1>
+                <p>Email: </p>
+                <p>Phone: </p>
+                <p>Location: General area </p>
+            </div>
+            <button>Post for sale</button>
+            <button>Cancel post</button>
+        </div>
+    `;
 }
 
-function loginButton() {
+
+function makeNewPost() {
+    $(".js-app-container").on("click", ".js-make-a-post", (event) => {
+        deleteView();
+        renderView(newPostPage());
+    });
+}
+
+function displayUserAccount() {
+   $(".js-app-container").on("click", ".js-signup-btn", (event) => {
+    console.log("wal-e"); 
+    //delete current view
+     deleteView();
+     renderView(generateAccountPage());
+   });
+}
+
+function    loginToAccount() {
     $(".js-login-page").on("click", (event) => {
         console.log("hi");
         deleteView();
@@ -145,11 +180,11 @@ function loginButton() {
     });
 }
 
-function homeButton(){
+function goToHomePage(){
     // console.log("you say hi and i say..");
     $(".js-home-button").on("click", (event) => {
         deleteView();
-        homePage();
+        showHomePage();
     });
 }
 
@@ -166,7 +201,7 @@ function findItemById(itemList, itemId) {
 }
 
 
-function showItemDetail(){
+function showItemDetails(){
     $(".js-app-container").on("click", ".js-item", (event) => {
         // deletes what is on current view
         deleteView();
@@ -180,11 +215,12 @@ function showItemDetail(){
     });
 }
 function app() {
-    // renders home page few items for sale
-    homePage();
-    showItemDetail();
-    homeButton();
-    loginButton();
+    showHomePage();
+    showItemDetails();
+    goToHomePage();
+    loginToAccount();
+    displayUserAccount();
+    makeNewPost();
 }
 
 $(app);
