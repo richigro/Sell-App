@@ -108,6 +108,35 @@ function loginPage() {
   `;
 }
 
+function generateAccountPage() {
+    return `
+    <div class="account-page">
+        <div class="profile">
+            <img src="#" />
+        </div>
+        <div class="account-info">
+            <h1>Account Information</h1>
+            <p>user name: </p>
+            <p>email: </p>
+            <p>live posts: </p>
+        </div>
+        <div class="user-posts">
+            <ul>
+                <li class="user-post"></li>
+                <li class="user-post"></li>
+            </ul>
+        </div>
+        <button> Make a new post!</button>
+    </div>
+    `;
+}
+
+function displayUserAccount() {
+    //delete current view
+    deleteView();
+    renderView(generateAccountPage());
+}
+
 function loginButton() {
     $(".js-login-page").on("click", (event) => {
         console.log("hi");
@@ -158,4 +187,4 @@ function app() {
     loginButton();
 }
 
-$(app());
+$(app);
