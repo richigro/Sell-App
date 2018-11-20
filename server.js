@@ -1,9 +1,18 @@
 const express = require('express');
 const app = express();
+const morgan = require('morgan');
+
+
+app.use(morgan('common'));
 app.use(express.static('public'));
+
 
 app.get('/', (req, res) => {
   res.send("hello");
+});
+
+app.post('/', (req, res) => {
+  res.json({hello: "there"});
 });
 
 function runServer() {
