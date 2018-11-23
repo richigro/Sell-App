@@ -1,6 +1,8 @@
 const express = require('express');
 const app = express();
 const morgan = require('morgan');
+const mongoose = require("mongoose");
+mongoose.Promise = global.Promise;
 
 
 app.use(morgan('common'));
@@ -14,6 +16,8 @@ app.get('/', (req, res) => {
 app.post('/', (req, res) => {
   res.json({hello: "there"});
 });
+
+let server;
 
 function runServer() {
     const port = process.env.PORT || 8080;
