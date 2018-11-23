@@ -1,23 +1,21 @@
+'use strict';
 const express = require('express');
 const app = express();
-const morgan = require('morgan');
-const mongoose = require("mongoose");
-mongoose.Promise = global.Promise;
-
-
+const morgan = require("morgan");
+const {PORT, DATABASE_URL} = require('./config');
+const {Item} = require('./models');
 app.use(morgan('common'));
 app.use(express.static('public'));
 
-
 app.get('/', (req, res) => {
-  res.send("hello");
+  res.json(
+    return Item.findOne().serialize();
+  );
 });
 
 app.post('/', (req, res) => {
-  res.json({hello: "there"});
+  res.send("post");
 });
-
-let server;
 
 function runServer() {
     const port = process.env.PORT || 8080;
