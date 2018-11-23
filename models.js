@@ -2,6 +2,7 @@
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
+// schema for item give structurte to data 
 const itemSchema = mongoose.Schema({
     image: {type: String, required: true},
     name: {type: String, required: true},
@@ -17,4 +18,7 @@ const itemSchema = mongoose.Schema({
     publishedAt: Number
 });
 
+//creating model from schema to be used for rest api routes 
+const Item = mongoose.model('Item', itemSchema);
+// export model object to use in other file 
 module.exports = { Item };
