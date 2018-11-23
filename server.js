@@ -2,8 +2,13 @@
 const express = require('express');
 const app = express();
 const morgan = require("morgan");
+const mongoose = require("mongoose");
+mongoose.Promise = global.Promise;
+
 const {PORT, DATABASE_URL} = require('./config');
 const {Item} = require('./models');
+
+
 app.use(morgan('common'));
 app.use(express.static('public'));
 
@@ -17,18 +22,26 @@ app.post('/', (req, res) => {
   res.send("post");
 });
 
-function runServer() {
-    const port = process.env.PORT || 8080;
-    return new Promise((resolve, reject) => {
+let server;
+
+function runServer(databaseUrl, port=PORT) {
+  return new Promise((resolve, reject) => {
+    mongoose.connect(databaseUrl, err => {
+      if (err) {
+        return reject(err);
+      }
+
       server = app.listen(port, () => {
         console.log(`Your app is listening on port ${port}`);
-        resolve(server);
+        resolve();
       })
       .on('error', err => {
+        mongoose.disconnect();
         reject(err);
       });
     });
-  }
+  });
+}
   
   function closeServer() {
     return new Promise((resolve, reject) => {
