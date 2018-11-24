@@ -18,6 +18,20 @@ const itemSchema = mongoose.Schema({
     publishedAt: Number
 });
 
+//pending serialization 
+// itemSchema.methods.serialize = function() {
+//     return {
+//         id: this._id,
+//         name: this.name,
+//         price:this.price,
+//         description: this.description,
+//         'short-description': this['short-description'],
+//         this: this,
+//         publishedAt: this.publishedAt
+//     }
+// };
+
+
 //creating model from schema to be used for rest api routes 
 const Item = mongoose.model('Item', itemSchema);
 // export model object to use in other file 

@@ -18,7 +18,7 @@ app.get('/for-sale', (req, res) => {
     .then(items => {
       res.json({
         items: items.map(
-          (item) => item )
+          (item) => item)
       });
     })
     .catch( err => {
