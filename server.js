@@ -10,12 +10,19 @@ const {Item} = require('./models');
 
 
 app.use(morgan('common'));
-app.use(express.static('public'));
+// app.use(express.static('public'));
 
 app.get('/', (req, res) => {
-  res.json(
-    return Item.findOne().serialize();
-  );
+  Item
+    .findOne()
+    .then((item) => res.json({
+        name: item.name,
+        price: item.price
+    }))
+    .catch( err => {
+      console.error(err)
+      res.status(500).json({message: 'Something went wrong'})}
+      );
 });
 
 app.post('/', (req, res) => {
@@ -58,7 +65,7 @@ function runServer(databaseUrl, port=PORT) {
   }
   
   if (require.main === module) {
-    runServer().catch(err => console.error(err));
+    runServer(DATABASE_URL).catch(err => console.error(err));
   };
   
  module.exports = { app, runServer, closeServer };
