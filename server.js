@@ -28,7 +28,36 @@ app.get('/for-sale', (req, res) => {
 });
 
 app.post('/post-for-sale', (req, res) => {
-  res.send("post");
+  const requiredFields = ['name', 'price', 'description', 'short-description', 'contact', 'publishedAt'];
+  for (let i=0; i<requiredFields.length; i++) {
+    const field = requiredFields[i];
+    if (!(field in req.body)) {
+      const message = `Missing \`${field}\` in request body`
+      console.error(message);
+      return res.status(400).send(message);
+    }
+  }
+
+  Item
+    .create({
+      name: req.body.name,
+      price: req.body.price,
+      description: req.body.description,
+      'short-description': req.body['short-description'],
+      contact: {
+        seller: 'created from post request',
+        phone: '1231313131313',
+        email: 'post@request.com',
+        location: '/post-for-sale route POST'
+      },
+      publishedAt: Date()
+    })
+    .then(
+      item => res.status(201).json(item))
+    .catch( err => {
+      console.error(err);
+      res.status(500).json({message: 'Internal server error from POST route'});
+    })  
 });
 
 // app.put('/');
