@@ -1,6 +1,6 @@
 'use strict';
 const mongoose = require("mongoose");
-mongoose.Promise = global.Promise;
+
 
 // schema for item give structurte to data 
 const itemSchema = mongoose.Schema({

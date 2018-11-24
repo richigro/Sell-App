@@ -65,9 +65,8 @@ function runServer(databaseUrl, port=PORT) {
       console.log("Closing server");
       server.close(err => {
         if (err) {
-          reject(err);
           // so we don't also call `resolve()`
-          return;
+          return reject(err);
         }
         resolve();
       });
