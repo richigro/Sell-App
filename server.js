@@ -12,22 +12,32 @@ const {Item} = require('./models');
 app.use(morgan('common'));
 // app.use(express.static('public'));
 
-app.get('/', (req, res) => {
+app.get('/for-sale', (req, res) => {
   Item
-    .findOne()
-    .then((item) => res.json({
-        name: item.name,
-        price: item.price
-    }))
+    .find()
+    .then(items => {
+      res.json({
+        items: items.map(
+          (item) => item )
+      });
+    })
     .catch( err => {
       console.error(err)
       res.status(500).json({message: 'Something went wrong'})}
       );
 });
 
-app.post('/', (req, res) => {
+app.post('/post-for-sale', (req, res) => {
   res.send("post");
 });
+
+// app.put('/');
+
+
+app.delete('/my-account/:item-id', (req, res) => {
+  res.send("hello from delete");
+});
+
 
 let server;
 
