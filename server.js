@@ -2,6 +2,8 @@
 const express = require('express');
 const app = express();
 const morgan = require("morgan");
+const bodyParser = require('body-parser');
+const jsonParser = bodyParser.json();
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
@@ -27,8 +29,8 @@ app.get('/for-sale', (req, res) => {
       );
 });
 
-app.post('/post-for-sale', (req, res) => {
-  const requiredFields = ['name', 'price', 'description', 'short-description', 'contact', 'publishedAt'];
+app.post('/post-for-sale', jsonParser, (req, res) => {
+  const requiredFields = ['name', 'price', 'description', 'contact', 'image', 'short-description'];
   for (let i=0; i<requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(field in req.body)) {
@@ -43,14 +45,15 @@ app.post('/post-for-sale', (req, res) => {
       name: req.body.name,
       price: req.body.price,
       description: req.body.description,
-      'short-description': req.body['short-description'],
-      contact: {
-        seller: 'created from post request',
-        phone: '1231313131313',
-        email: 'post@request.com',
-        location: '/post-for-sale route POST'
-      },
-      publishedAt: Date()
+      image: req.body.image,
+      'short-description':  req.body['short-description'],
+      publishedAt: '235',
+      contact:  {
+        seller: "test seller",
+        phone: "123578",
+        email: 'asdfghjk@asdfg.com',
+        location: 'asdfgh 123 ty'
+      }
     })
     .then(
       item => res.status(201).json(item))
