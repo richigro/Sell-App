@@ -9,6 +9,7 @@ mongoose.Promise = global.Promise;
 
 const {PORT, DATABASE_URL} = require('./config');
 const {Item} = require('./models');
+const {User} = require('./models');
 
 
 app.use(morgan('common'));
@@ -30,7 +31,7 @@ app.get('/for-sale', (req, res) => {
 });
 
 app.post('/post-for-sale', jsonParser, (req, res) => {
-  const requiredFields = ['name', 'price', 'description', 'contact', 'image', 'short-description'];
+  const requiredFields = ['name', 'price', 'description', 'image'];
   for (let i=0; i<requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(field in req.body)) {
@@ -46,14 +47,7 @@ app.post('/post-for-sale', jsonParser, (req, res) => {
       price: req.body.price,
       description: req.body.description,
       image: req.body.image,
-      'short-description':  req.body['short-description'],
-      publishedAt: '235',
-      contact:  {
-        seller: "test seller",
-        phone: "123578",
-        email: 'asdfghjk@asdfg.com',
-        location: 'asdfgh 123 ty'
-      }
+      publishedAt: '1235'
     })
     .then(
       item => res.status(201).json(item))
