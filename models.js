@@ -15,9 +15,9 @@ const itemSchema = mongoose.Schema({
     name: {type: String, required: true},
     price: {type: String, required: true},
     description: {type: String, required: true},
-    // 'short-description': {type: String, required: true},
-    // seller: { type: Mongoose.Object.Id, ref: 'User' },
-    publishedAt: Number
+    shortDescription: {type: String, required: true},
+    seller: {type: mongoose.Schema.ObjectId, ref: 'User' },
+    publishedOn: Date.now
 });
 
 //pending serialization 

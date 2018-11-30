@@ -31,7 +31,7 @@ app.get('/for-sale', (req, res) => {
 });
 
 app.post('/post-for-sale', jsonParser, (req, res) => {
-  const requiredFields = ['name', 'price', 'description', 'image'];
+  const requiredFields = ['name', 'price', 'description', 'image', 'shortDescription'];
   for (let i=0; i<requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(field in req.body)) {
@@ -47,7 +47,8 @@ app.post('/post-for-sale', jsonParser, (req, res) => {
       price: req.body.price,
       description: req.body.description,
       image: req.body.image,
-      publishedAt: '1235'
+      shortDescription: req.body.shortDescription,
+      publishedOn: Date.now
     })
     .then(
       item => res.status(201).json(item))
