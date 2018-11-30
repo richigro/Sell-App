@@ -30,7 +30,7 @@ describe('Simple Test', function() {
             expect(res.body.items.length).to.be.above(0);
             res.body.items.forEach(function(item) {
                 expect(item).to.be.a('object');
-                expect(item).to.have.all.keys('_id','name', 'contact', 'description', 'short-description', 'image', 'price', 'publishedAt');
+                expect(item).to.have.all.keys('_id','name', 'seller', 'description', 'shortDescription', 'image', 'price', 'publishedOn');
             });
 
         });
