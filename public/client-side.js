@@ -1,137 +1,5 @@
 "use strict";
 
-const MOCK_ITEMS_ON_SALE = {
-    "itemsOnSale": [
-        {
-            "id": '1',
-            image: "https://images.craigslist.org/00t0t_WuM79Dms7O_600x450.jpg",
-            name: "Sewing Machine",
-            "price": "200",
-            "description": "Singer Sewing Machine in Working Condition, in Solid wood Limited Federal Style Singer Cabine",
-            "short-description": "High-end sewing machine slighty used",
-            "contact":
-              {
-              "seller": "SadWolf175",
-              "phone": "(016)-083-5458",
-              "email": "Maryam.Mocking11@Outlook.Com",
-              "location": "Plompetorenbrug"
-              },
-            "publishedAt": 1470016976609
-          },
-          {
-            "id": '2',
-            "image": "https://images.craigslist.org/00A0A_2KJlKrWn3VW_600x450.jpg",
-            "name": "Reams of Paper",
-            "price": "20",
-            "description": "Earth's Choice copier paper glossy office paper. 500 sheets, Color Lock technology",
-            "short-description": "20lbs letter stock 8.5X11",
-            "contact":
-              {
-              "seller": "Happyswan117",
-              "phone": "(069)-433-7044",
-              "email": "Sophia.King41@Yahoo.Com",
-              "location": "Great King Street"
-              },
-            "publishedAt": 1470016976609
-          },
-          {
-            "id": '3',  
-            "image": "https://images.craigslist.org/00101_iivDJvqAYaK_600x450.jpg",
-            "name": "Fox Rockstar Helmet v1",
-            "price": "100",
-            "description": "RockStar Fox V1 51-52cm youth size large Helmet in Excellent condition. Used for our dirt bike that we no longer have",
-            "short-description": "Used for our dirt bike that we no longer have",
-            "contact":
-              {
-              "seller": "Smallcat600",
-              "phone": "(691)-077-3227",
-              "email": "Luigi.Garnier11@Outlook.Com",
-              "location": "Rue Du Bon-Pasteur"
-              },
-            "publishedAt": 1470016976609
-          },
-          {
-            "id": '4',  
-            "image": "https://images.craigslist.org/00P0P_NbvGkvGObM_600x450.jpg",
-            "name": "Cardi B T-shirt",
-            "price": "25",
-            "description": "Brand new never used Cardi B XL Unisex T-shirt in new condition/ Never Used.",
-            "short-description": "Brand new never used Cardi B XL",
-            "contact":
-              {
-              "seller": "Bluegorilla626",
-              "phone": "94461035",
-              "email": "Maria.J0rgensen3@Gmail.Com",
-              "location": "Højgårdsvej"
-              },
-            "publishedAt": 1470016976609
-          },
-          {
-            "id": '5',  
-            "image": "https://images.craigslist.org/00P0P_dzWWB8l5hxm_600x450.jpg",
-            "name": "Silver Nissan 2004 titan",
-            "price": "8970",
-            "description": "Silver Nissan 2004 titan, 180,412 miles, automatic,2 door, 8 cylinders, leather seats",
-            "short-description": " 180,412 miles",
-            "contact":
-              {
-              "seller": "Angrygorilla963",
-              "phone": "96044921",
-              "email": "Munira.Strande94@Harvard.Student.Edu",
-              "location": "Elverumgata"
-              },
-            "publishedAt": 1470016976609
-          },
-          {
-            "id": '6',  
-            "image": "https://images.craigslist.org/00c0c_h7FO7e0zySN_600x450.jpg",
-            "name": "Lots of Rv vehicles",
-            "price": "700",
-            "description": "Garage sale Saturday and Sunday. Everything must go. If you have a 99-06 ford truck I've probably got parts for it. Too much to list. Come on out from 7:45-2 on Saturday and 10-? On Sunday ",
-            "short-description": "Garage sale Saturday and Sunday. Everything must go",
-            "contact":
-              {
-              "seller": "Goldenbear151",
-              "phone": "58334456",
-              "email": "Alexander.Poulsen57@Hotmail.Com",
-              "location": "Søbakken"
-              },
-            "publishedAt": 1470016976609
-          },
-          {
-            "id": '7',  
-            "image": "https://images.craigslist.org/00606_jErp8JUFk24_600x450.jpg",
-            "name": " living room sofa",
-            "price": "400",
-            "description": "living room set. leather sofa, loveseat and recliner. each outside seat on sofa and loveseat recline. Camel color. 3 years old with a little worn spots. All recliners work great. cash only, pick up ",
-            "short-description": "living room set. leather sofa, loveseat and recliner",
-            "contact":
-              {
-              "seller": "Goldendog652",
-              "phone": "(172)-245-1224",
-              "email": "Alan.Lawson29@Yahoo.Com",
-              "location": "W Belt Line Rd"
-              },
-            "publishedAt": 1470016976609
-          },
-          {
-            "id": '8',  
-            "image": "https://images.craigslist.org/00b0b_lC8pfkbzOyK_600x450.jpg",
-            "name": " Nike Mens Hi-Toe",
-            "price": "63",
-            "description": "4Sale:Nike Men's Basketball Hi-Toe, Size 9, Red/Silver Logo -Style: Hi-Toe Hyperdunk Meetup is at HEB at Grissom Rd/Tezel, Active public site, Cash only -Not shown out of a private home",
-            "short-description": "Nike Mens Hi-Toe Size 9, Red w Silver Logo",
-            "contact":
-              {
-              "seller": "Happyostrich375",
-              "phone": "(879)-955-9455",
-              "email": "Flavio.Smids86@Aol.Com",
-              "location": "Jacobijnenstraat"
-              },
-            "publishedAt": 1470016976609
-          }
-    ]
-};
 // appends a view to the app
 function renderView(view){
     $(".js-app-container").append(view);
@@ -142,8 +10,15 @@ function deleteView() {
 }
 
 function showHomePage() {
-    MOCK_ITEMS_ON_SALE.itemsOnSale.forEach((item) => {
-        renderView(itemList(item));
+    $.ajax({
+        url: '/for-sale',
+        dataType: 'json',
+        success: function(res, status){
+            // console.log(status);
+            res.items.forEach((item) => {
+                renderView(itemList(item));
+            });
+        }
     });
 }
 

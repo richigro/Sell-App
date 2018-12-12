@@ -17,7 +17,7 @@ const itemSchema = mongoose.Schema({
     description: {type: String, required: true},
     shortDescription: {type: String, required: true},
     seller: {type: mongoose.Schema.ObjectId, ref: 'User' },
-    publishedOn: Date.now
+    publishedOn: Date
 });
 
 //pending serialization 

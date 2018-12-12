@@ -13,7 +13,7 @@ const {User} = require('./models');
 
 
 app.use(morgan('common'));
-// app.use(express.static('public'));
+app.use(express.static('public'));
 
 app.get('/for-sale', (req, res) => {
   Item
