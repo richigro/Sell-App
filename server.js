@@ -14,7 +14,7 @@ const {User} = require('./models');
 
 app.use(morgan('common'));
 app.use(express.static('public'));
-
+//get all items for sale
 app.get('/for-sale', (req, res) => {
   Item
     .find()
@@ -25,13 +25,26 @@ app.get('/for-sale', (req, res) => {
       });
     })
     .catch( err => {
-      console.error(err)
-      res.status(500).json({message: 'Something went wrong'})}
+      console.error(err);
+      res.status(500).json({message: 'Something went wrong while getting all items from server or db'})}
       );
 });
 
+//get item for sale by id
+app.get('/for-sale/:id', (req, res) => {
+  Item
+    .findById(req.params.id)
+    .then((item) => res.json(item))
+    .catch( err => {
+      console.error(err);
+      res.status(500).json({message: 'Something went wrong while getting item from server or db'});
+    });
+});
+
+// post for creating new items for sale
 app.post('/post-for-sale', jsonParser, (req, res) => {
-  const requiredFields = ['name', 'price', 'description', 'image', 'shortDescription'];
+  console.log(req.body);
+  const requiredFields = ['price', 'name', 'description', 'image', 'shortDescription'];
   for (let i=0; i<requiredFields.length; i++) {
     const field = requiredFields[i];
     if (!(field in req.body)) {
@@ -48,14 +61,14 @@ app.post('/post-for-sale', jsonParser, (req, res) => {
       description: req.body.description,
       image: req.body.image,
       shortDescription: req.body.shortDescription,
-      publishedOn: Date.now
+      publishedOn: new Date()
     })
     .then(
       item => res.status(201).json(item))
     .catch( err => {
       console.error(err);
       res.status(500).json({message: 'Internal server error from POST route'});
-    })  
+    })
 });
 
 // app.put('/');

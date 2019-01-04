@@ -13,8 +13,7 @@ function showHomePage() {
     $.ajax({
         url: '/for-sale',
         dataType: 'json',
-        success: function(res, status){
-            // console.log(status);
+        success: function(res) {
             res.items.forEach((item) => {
                 renderView(itemList(item));
             });
@@ -25,7 +24,7 @@ function showHomePage() {
 // renders the home page takes data from api
 function itemList(item){
     return `
-        <div class="js-item item-container" id=${item.id}>
+        <div class="js-item item-container" id=${item['_id']}>
             <h1 class="item-title">${item.name}</h1>
             <img class="item-img-home" src="${item.image}" />
             <p class="item-desc">${item["short-description"]}</p>
@@ -105,25 +104,52 @@ function generateAccountPage() {
 
 function newPostPage() {
     return `
-        <div class="post-page">
-            <div class="item-descrition">
-                <form>
-                    <input type="text"/>
-                </form>
-            </div>
-            <div class="item-picture">
-                <img src="#" />
-            </div>
-            <div class="seller-info">
-                <h1>Seller Info</h1>
-                <p>Email: </p>
-                <p>Phone: </p>
-                <p>Location: General area </p>
-            </div>
-            <button>Post for sale</button>
-            <button>Cancel post</button>
-        </div>
+        <section class="post-layout">
+            <form class="post-form">
+                <label for="name">Name</label>
+                <input class="text-input-form" id="name" type="text"/>
+                <label for="price">Price</label>
+                <input class="text-input-form" id="price" type="number"/>
+                <label for="image">Image Url</label>
+                <input class="text-input-form" id="image" type="text"/>
+                <label for="shortDescription">Short Description</label>
+                <input class="text-input-form" id="shortDescription" type="text"/>
+                <label for="description">Description</label>
+                <input class="text-input-form" id="description" type="text-area"/>
+                <button class="js-post-item">Post for sale</button>
+                <button>Cancel post</button>
+            </form>
+        </section>
     `;
+}
+
+function postItemForSale() {
+    $(".js-app-container").on("click", ".js-post-item", (event) => {
+        event.preventDefault();
+        const itemToBePosted = {
+            name: $("#name").val(),
+            price: $("#price").val(),
+            description: $("#description").val(),
+            image: $("#image").val(),
+            shortDescription: $("#shortDescription").val()
+        }
+        const jsonItem = JSON.stringify(itemToBePosted);
+        // console.log(jsonItem, typeof jsonItem); 
+        $.ajax({
+            type: 'POST',
+            url: '/post-for-sale',
+            dataType: 'json',
+            data: jsonItem,
+            success: function(){
+                console.log('yay!');
+            },
+            error: function(err) {
+                console.log(jsonItem);
+                console.log(typeof jsonItem);
+                console.log('something happened!');
+            }   
+        });
+    });
 }
 
 
@@ -176,13 +202,15 @@ function showItemDetails(){
     $(".js-app-container").on("click", ".js-item", (event) => {
         // deletes what is on current view
         deleteView();
-        const itemId = ((event.target).closest("div").id).toString();
-        // console.log(typeof itemId);
-        const allItems = MOCK_ITEMS_ON_SALE.itemsOnSale;
-        // console.log(allItems);
-        const selectedItem = findItemById(allItems, itemId); 
-        // loads new view
-        renderView(productDetailPage(selectedItem));
+        const itemId = ((event.target).closest("div").id);
+        // console.log(itemId);
+        $.ajax({
+            url: `/for-sale/${itemId}`,
+            success: function(res) {
+                // console.log(res);
+                renderView(productDetailPage(res));
+            }
+        });
     });
 }
 function app() {
@@ -192,6 +220,7 @@ function app() {
     loginToAccount();
     displayUserAccount();
     makeNewPost();
+    postItemForSale();
 }
 
 $(app);

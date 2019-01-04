@@ -13,7 +13,7 @@ const userSchema = mongoose.Schema({
 const itemSchema = mongoose.Schema({
     image: {type: String, required: true},
     name: {type: String, required: true},
-    price: {type: String, required: true},
+    price: {type: Number, required: true},
     description: {type: String, required: true},
     shortDescription: {type: String, required: true},
     seller: {type: mongoose.Schema.ObjectId, ref: 'User' },
