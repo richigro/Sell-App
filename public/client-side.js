@@ -92,7 +92,15 @@ function generateAccountPage() {
             <p>live posts: </p>
         </div>
         <div class="user-posts">
-            <ul>
+            <ul class="user-posts"> 
+            ${$.ajax({
+                url: '/for-sale',
+                sucess: function(res){
+                    res.items.forEach((item) => {
+                        $(".user-posts").append(`<li>${item.name}</li>`);
+                    });
+                }
+            })}
                 <li class="user-post"></li>
                 <li class="user-post"></li>
             </ul>
@@ -133,22 +141,34 @@ function postItemForSale() {
             image: $("#image").val(),
             shortDescription: $("#shortDescription").val()
         }
-        const jsonItem = JSON.stringify(itemToBePosted);
+        console.log(itemToBePosted);
+        // const jsonItem = JSON.stringify(itemToBePosted);
         // console.log(jsonItem, typeof jsonItem); 
+        
         $.ajax({
-            type: 'POST',
+            type:'POST',
             url: '/post-for-sale',
-            dataType: 'json',
-            data: jsonItem,
-            success: function(){
-                console.log('yay!');
-            },
-            error: function(err) {
-                console.log(jsonItem);
-                console.log(typeof jsonItem);
-                console.log('something happened!');
-            }   
+            data: itemToBePosted,
+            success: function(newItem){
+                console.log(newItem);
+            }
         });
+        
+        
+        // $.ajax({
+        //     type: 'POST',
+        //     url: '/post-for-sale',
+        //     dataType: 'json',
+        //     data: jsonItem,
+        //     success: function(){
+        //         console.log('yay!');
+        //     },
+        //     error: function(err) {
+        //         console.log(jsonItem);
+        //         console.log(typeof jsonItem);
+        //         console.log('something happened!');
+        //     }   
+        // });
     });
 }
 

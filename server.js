@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 const morgan = require("morgan");
 const bodyParser = require('body-parser');
-const jsonParser = bodyParser.json();
+// const jsonParser = bodyParser.json();
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
@@ -14,6 +14,14 @@ const {User} = require('./models');
 
 app.use(morgan('common'));
 app.use(express.static('public'));
+// app.use(jsonParser);
+//fix post bug
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(bodyParser.json());
+
+
 //get all items for sale
 app.get('/for-sale', (req, res) => {
   Item
@@ -41,8 +49,16 @@ app.get('/for-sale/:id', (req, res) => {
     });
 });
 
+//get all items that belong to specific user
+
+
+
+
 // post for creating new items for sale
-app.post('/post-for-sale', jsonParser, (req, res) => {
+app.post('/post-for-sale', (req, res) => {
+  //get seller id from jwt
+  const sellerId = 
+  
   console.log(req.body);
   const requiredFields = ['price', 'name', 'description', 'image', 'shortDescription'];
   for (let i=0; i<requiredFields.length; i++) {
@@ -61,6 +77,7 @@ app.post('/post-for-sale', jsonParser, (req, res) => {
       description: req.body.description,
       image: req.body.image,
       shortDescription: req.body.shortDescription,
+      seller: sellerId,
       publishedOn: new Date()
     })
     .then(
