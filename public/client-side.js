@@ -50,7 +50,7 @@ function productDetailPage(item){
     `;
 }
 
-function loginPage() {
+function signupPage() {
     return `
     <div class="js-sign-up-page">
         <form action="#" class="sign-up-form">
@@ -58,6 +58,12 @@ function loginPage() {
                 <h1 class="sign-up-title-text">Sign Up</h1>
                 <p>Please fill in this form to create an account.</p>
                 <hr>
+                <label for="first-name"><b>First Name</b></label>
+                <input type="text" placeholder="name" name="first-name" required>
+                <label for="last-name"><b>Last Name</b></label>
+                <input type="text" placeholder="last name" name="last-name" required>
+                <label for="email"><b>Username</b></label>
+                <input type="text" placeholder="Enter Email" name="email" required>
                 <label for="email"><b>Email</b></label>
                 <input type="text" placeholder="Enter Email" name="email" required>
                 <label for="psw"><b>Password</b></label>
@@ -193,7 +199,7 @@ function    loginToAccount() {
     $(".js-login-page").on("click", (event) => {
         console.log("hi");
         deleteView();
-        renderView(loginPage());
+        renderView(signupPage);
     });
 }
 
