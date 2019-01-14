@@ -139,7 +139,23 @@ function signupPage() {
   `;
 }
 
-function generateAccountPage() {
+function loadandAppendUserPostedItems() {
+    $.ajax({
+        url: '/for-sale',
+        success: function(res) {
+            res.items.forEach((item) => $(".js-user-posts").append(`<li id="${item["_id"]}" class="item-preview">
+            <img class="item-image-preview" src="${item.image}" />
+            <p>${item.name}</p>
+            <p>${item.shortDescription}</p>
+            <div><button class="js-delete-post">Delete post</button></div>
+            <div><button>Edit Post</button></div>
+            </li>
+            `));
+        }
+    });
+}
+
+function dashboardStructure() {
     return `
     <div class="account-page">
         <div class="profile">
@@ -152,22 +168,17 @@ function generateAccountPage() {
             <p>live posts: </p>
         </div>
         <div class="user-posts">
-            <ul class="user-posts"> 
-            ${$.ajax({
-                url: '/for-sale',
-                sucess: function(res){
-                    res.items.forEach((item) => {
-                        $(".user-posts").append(`<li>${item.name}</li>`);
-                    });
-                }
-            })}
-                <li class="user-post"></li>
-                <li class="user-post"></li>
+            <ul class="js-user-posts">
             </ul>
         </div>
         <button class="js-make-a-post"> Make a new post!</button>
     </div>
     `;
+}
+
+function generateAccountPage() {
+    renderView(dashboardStructure());
+    loadandAppendUserPostedItems();
 }
 
 function newPostPage() {
@@ -272,6 +283,26 @@ function showItemDetails(){
         });
     });
 }
+
+function deleteUserPostFromDashboard() {
+    $(".js-app-container").on("click", ".js-delete-post", (event) => {
+        event.preventDefault();
+        const itemId = event.target.closest("li").id;
+        console.log(itemId);
+        // ajax call to delete endpoint api
+        $.ajax({
+            type: 'DELETE',
+            url: '/delte/post/',
+            success: function(res) {
+                console.log("??");
+            }
+        });
+
+        //refresh dashboard
+        generateAccountPage();
+    });
+}
+
 function app() {
     showHomePage();
     showItemDetails();
@@ -280,6 +311,7 @@ function app() {
     displayUserAccount();
     makeNewPost();
     postItemForSale();
+    deleteUserPostFromDashboard();
 }
 
 $(app);

@@ -97,3 +97,15 @@ body {
      text-align: center;
      font-size: 32PX;
  }
+
+ .item-preview{
+     display: inline-block;
+     height: 180px;
+     width: 80%;
+     border: 1px solid black;
+ }
+
+ .item-image-preview {
+     height: 100%;
+     width: 50%;
+ }
