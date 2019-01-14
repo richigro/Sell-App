@@ -27,7 +27,7 @@ function itemList(item){
         <div class="js-item item-container" id=${item['_id']}>
             <h1 class="item-title">${item.name}</h1>
             <img class="item-img-home" src="${item.image}" />
-            <p class="item-desc">${item["short-description"]}</p>
+            <p class="item-desc">${item.shortDescription}</p>
         </div>`;    
 }
 
@@ -35,16 +35,17 @@ function productDetailPage(item){
     return `
         <main role="main">
             <h1>${item.name}</h1>
+            <p>$${item.price}</p>
             <img src="${item.image}" alt="${item.name}"/>
             <div class="item-description">
                 <p>${item.description}</p>
             </div>
             <div class="seller-info">
                 <h1>Contact Seller</h1>
-                <p>Seller: ${item.contact["seller"]}</p>
-                <p>email: ${item.contact["email"]}</p>
-                <p>phone: ${item.contact["phone"]}</p>
-                <p>Location: ${item.contact["location"]}</p>
+                <p>Seller: ${1}</p>
+                <p>email: </p>
+                <p>phone: </p>
+                <p>Location: </p>
             </div>
         </main>
     `;
@@ -89,7 +90,7 @@ function generateAccountPage() {
     return `
     <div class="account-page">
         <div class="profile">
-            <img src="#" />
+            <img src="#"/>
         </div>
         <div class="account-info">
             <h1>Account Information</h1>
@@ -147,10 +148,6 @@ function postItemForSale() {
             image: $("#image").val(),
             shortDescription: $("#shortDescription").val()
         }
-        console.log(itemToBePosted);
-        // const jsonItem = JSON.stringify(itemToBePosted);
-        // console.log(jsonItem, typeof jsonItem); 
-        
         $.ajax({
             type:'POST',
             url: '/post-for-sale',
@@ -159,25 +156,8 @@ function postItemForSale() {
                 console.log(newItem);
             }
         });
-        
-        
-        // $.ajax({
-        //     type: 'POST',
-        //     url: '/post-for-sale',
-        //     dataType: 'json',
-        //     data: jsonItem,
-        //     success: function(){
-        //         console.log('yay!');
-        //     },
-        //     error: function(err) {
-        //         console.log(jsonItem);
-        //         console.log(typeof jsonItem);
-        //         console.log('something happened!');
-        //     }   
-        // });
     });
 }
-
 
 function makeNewPost() {
     $(".js-app-container").on("click", ".js-make-a-post", (event) => {
@@ -195,7 +175,7 @@ function displayUserAccount() {
    });
 }
 
-function    loginToAccount() {
+function loginToAccount() {
     $(".js-login-page").on("click", (event) => {
         console.log("hi");
         deleteView();
