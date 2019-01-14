@@ -28,14 +28,36 @@ body {
 
 .item-container{
     margin: 10px auto;
-    height: 200px;
+    height: 300px;
     width: 80%;
     border: 1px solid black;
 }
 
+
+.item-image-home {
+    height: 200px;
+    margin: 0 auto;
+    width: auto;
+    display: block;
+}
+
+.item-info-home{
+    display: block;
+}
 .item-title {
     text-align: center;
     font-size: 32px;
+}
+
+.item-price-home{
+    height: 10%;
+    width: auto;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    display: inline-block;
+    padding-bottom: 0px;
+    padding: 2px;
+    
 }
 
 .app-links {

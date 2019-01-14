@@ -21,13 +21,66 @@ function showHomePage() {
     });
 }
 
+function convertNumberMonthToStringMonth(numberMonth) {
+    let month;
+    switch (numberMonth) {
+        case 0:
+          month = "Jan";
+          break;
+        case 1:
+          month = "Feb";
+          break;
+        case 2:
+           month = "Mar";
+          break;
+        case 3:
+          month = "Apr";
+          break;
+        case 4:
+          month = "May";
+          break;
+        case 5:
+          month = "June";
+          break;
+        case 6:
+          month = "July";
+          break;
+        case 7: 
+          month = "Aug";
+          break;
+        case 8:
+          month = "Sep";
+          break;
+        case 9:
+          month = "Oct";
+          break;
+        case 10:
+          month = "Nov";
+          break;
+        case 11:
+          month = "Dec";
+          break;           
+      }
+      return month;
+}
+
+
+
+function normalizeIsoDate(isoDate) {
+    const numberMonth = new Date(isoDate).getMonth();
+    const stringMonth = convertNumberMonthToStringMonth(numberMonth);
+    const dayPosted = new Date(isoDate).getDate();
+    return `${stringMonth} ${dayPosted} -`;
+}
+
+
 // renders the home page takes data from api
 function itemList(item){
     return `
         <div class="js-item item-container" id=${item['_id']}>
-            <h1 class="item-title">${item.name}</h1>
-            <img class="item-img-home" src="${item.image}" />
-            <p class="item-desc">${item.shortDescription}</p>
+            <div class="item-price-home">$${item.price}</div>
+            <img class="item-image-home" src="${item.image}" />
+            <div class="item-info-home">${normalizeIsoDate(item.publishedOn)} ${item.name}</div>
         </div>`;    
 }
 
