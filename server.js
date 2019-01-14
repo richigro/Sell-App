@@ -80,8 +80,18 @@ app.post('/post-for-sale', (req, res) => {
 });
 
 // app.put('/');
-app.delete('/my-account/:item-id', (req, res) => {
-  res.send("hello from delete");
+app.delete('/delete/post/:id', (req, res) => {
+  const itemId = req.params.id
+  console.log("deleting post now...");
+  Item
+  .findByIdAndRemove(itemId)
+  .then(
+    res.status(204))
+  .catch( err => {
+    console.log(err);
+    res.status(500).json({message: "there was an error while deleting the post"});
+  });
+
 });
 
 let server;

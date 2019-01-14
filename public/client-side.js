@@ -292,14 +292,13 @@ function deleteUserPostFromDashboard() {
         // ajax call to delete endpoint api
         $.ajax({
             type: 'DELETE',
-            url: '/delte/post/',
+            url: `/delete/post/${itemId}`,
             success: function(res) {
-                console.log("??");
+                console.log(res);
+                //refresh dashboard
+                generateAccountPage();
             }
         });
-
-        //refresh dashboard
-        generateAccountPage();
     });
 }
 
