@@ -79,7 +79,28 @@ app.post('/post-for-sale', (req, res) => {
     })
 });
 
-// app.put('/');
+// update user posted item
+app.put('/edit/post/:id', (req, res) => {
+  Item
+  .findByIdAndUpdate({_id: req.params.id}, req.body)
+  .then(() => {
+    Item
+    .findOne({_id: req.params.id})
+    .then((updatedItem) => {
+      res.status(204).json(updatedItem);
+    })
+    .catch( err => {
+      console.error(err);
+      res.status(500).json({message: "Error while retriving updated item"});
+    });
+  })
+  .catch( err => {
+    console.error(err);
+    res.status(500).json({message: "There was an error while retriving the item to be updated"});
+  });
+});
+
+
 app.delete('/delete/post/:id', (req, res) => {
   const itemId = req.params.id
   console.log("deleting post now...");
@@ -88,7 +109,7 @@ app.delete('/delete/post/:id', (req, res) => {
   .then(
     res.status(204))
   .catch( err => {
-    console.log(err);
+    console.error(err);
     res.status(500).json({message: "there was an error while deleting the post"});
   });
 

@@ -148,7 +148,7 @@ function loadandAppendUserPostedItems() {
             <p>${item.name}</p>
             <p>${item.shortDescription}</p>
             <div><button class="js-delete-post">Delete post</button></div>
-            <div><button>Edit Post</button></div>
+            <div><button class="js-edit-post">Edit Post</button></div>
             </li>
             `));
         }
@@ -179,6 +179,30 @@ function dashboardStructure() {
 function generateAccountPage() {
     renderView(dashboardStructure());
     loadandAppendUserPostedItems();
+}
+
+function editPostPage(item) {
+    return `
+        <section class="post-layout">
+            <div class="item-image-edit-post">
+                <img src="#"/>
+            </div>
+        <form class="post-form">
+            <label for="name">Name</label>
+            <input class="text-input-form" id="name" type="text"/>
+            <label for="price">Price</label>
+            <input class="text-input-form" id="price" type="number"/>
+            <label for="image">Image Url</label>
+            <input class="text-input-form" id="image" type="text"/>
+            <label for="shortDescription">Short Description</label>
+            <input class="text-input-form" id="shortDescription" type="text"/>
+            <label for="description">Description</label>
+            <input class="text-input-form" id="description" type="text-area"/>
+            <button class="js-post-item">Post for sale</button>
+            <button>Cancel post</button>
+        </form>
+        </section>
+    `;
 }
 
 function newPostPage() {
@@ -255,6 +279,21 @@ function goToHomePage(){
     });
 }
 
+function getItemById(itemId){
+    let _item;
+    $.ajax({
+        type: 'GET',
+        url: `/for-sale/${itemId}`,
+        success: function(item) {
+            _item = item;
+            return _item;
+        }
+    });
+
+    return _item;
+}
+
+
 function findItemById(itemList, itemId) {
     let foundItem = {};
     itemList.forEach((item) => {
@@ -302,6 +341,37 @@ function deleteUserPostFromDashboard() {
     });
 }
 
+function changedFields() {
+
+}
+
+function editPost() {
+    $(".js-app-container").on("click", ".js-edit-post", (event) => {
+        event.preventDefault;
+        const itemId = event.target.closest("li").id;
+        console.log(itemId);
+        // const retrievedItem = JSON.parse(getItemById(itemId));
+        // console.log(retrievedItem);
+        //delete current view
+        deleteView();
+        // render edit post page
+        alert(getItemById(itemId));
+        // renderView(editPostPage());
+        //check to see if fields change
+
+        // update changed fields with put request
+        $.ajax({
+            type: 'PUT',
+            url: `/edit/post/${itemId}`,
+            data: {name: "12345fgr"},
+            success: function(res){
+                console.log("PUT worked!");
+            }
+        });
+    });
+}
+
+
 function app() {
     showHomePage();
     showItemDetails();
@@ -311,6 +381,7 @@ function app() {
     makeNewPost();
     postItemForSale();
     deleteUserPostFromDashboard();
+    editPost();
 }
 
 $(app);
