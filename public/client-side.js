@@ -181,30 +181,6 @@ function generateAccountPage() {
     loadandAppendUserPostedItems();
 }
 
-function editPostPage(item) {
-    return `
-        <section class="post-layout">
-            <div class="item-image-edit-post">
-                <img src="#"/>
-            </div>
-        <form class="post-form">
-            <label for="name">Name</label>
-            <input class="text-input-form" id="name" type="text"/>
-            <label for="price">Price</label>
-            <input class="text-input-form" id="price" type="number"/>
-            <label for="image">Image Url</label>
-            <input class="text-input-form" id="image" type="text"/>
-            <label for="shortDescription">Short Description</label>
-            <input class="text-input-form" id="shortDescription" type="text"/>
-            <label for="description">Description</label>
-            <input class="text-input-form" id="description" type="text-area"/>
-            <button class="js-post-item">Post for sale</button>
-            <button>Cancel post</button>
-        </form>
-        </section>
-    `;
-}
-
 function newPostPage() {
     return `
         <section class="post-layout">
@@ -279,21 +255,6 @@ function goToHomePage(){
     });
 }
 
-function getItemById(itemId){
-    let _item;
-    $.ajax({
-        type: 'GET',
-        url: `/for-sale/${itemId}`,
-        success: function(item) {
-            _item = item;
-            return _item;
-        }
-    });
-
-    return _item;
-}
-
-
 function findItemById(itemList, itemId) {
     let foundItem = {};
     itemList.forEach((item) => {
@@ -341,33 +302,85 @@ function deleteUserPostFromDashboard() {
     });
 }
 
-function changedFields() {
+function changedFields(formObject) {
+    // const a = $(".js-name").attr("placeholder");
+    const itemFileds = ['name', 'price', 'description', 'shortDescription'];
+    const itemsToChange = [];
+    if(field != ""){
+        itemsToChange.push(filed);
+    } else {
+        return HTMLBodyElement;
+    }
+}
 
+function renderItemToEdit(itemId){
+    $.ajax({
+        type: 'GET',
+        url: `/for-sale/${itemId}`,
+        success: function(item) {
+            console.log(item);
+            return renderView(editPostPage(item));
+        }
+    });
+}
+
+function editPostPage(item) {
+    return `
+        <section class="edit-layout" id="">
+            <div class="item-image-edit-post">
+                <img src="${item.image}"/>
+            </div>
+        <form class="js-edit-form">
+            <label for="name">Name</label>
+            <input class="text-input-form js-edited-name" id="name" type="text" placeholder="${item.name}"/>
+            <label for="price">Price</label>
+            <input class="text-input-form js-edited-price" id="price" type="number" placeholder="${item.price}"/>
+            <label for="image">Image Url</label>
+            <input class="text-input-form js-edited-image" id="image" type="text" placeholder="${item.image}"/>
+            <label for="shortDescription">Short Description</label>
+            <input class="text-input-form js-edited-shortDescription" id="shortDescription" type="text" placeholder="${item.shortDescription}"/>
+            <label for="description">Description</label>
+            <input class="text-input-form js-edited-description" id="description" type="text-area" placeholder="${item.description}"/>
+            <button type="button" class="js-make-changes">Make Changes</button>
+            <button type="button">Cancel Changes</button>
+        </form>
+        </section>
+    `;
+}
+
+function makeChanges() {
+    $(".js-app-container").on("click", ".js-make-changes", (event) => {
+        event.preventDefault();
+
+        const formObject = {
+            name: $(".js-edited-name").val(),
+            price: $(".js-edited-price").val(),
+            description: $(".js-edited-description").val(),
+            shortDescription: $(".js-edited-shortDescription").val()
+        }
+         // update changed fields with put request
+         $.ajax({
+            type: 'PUT',
+            url: `/edit/post/${itemId}`,
+            data: formObject,
+            success: function(res){
+                console.log("PUT worked!");
+            }
+        });
+    });
 }
 
 function editPost() {
     $(".js-app-container").on("click", ".js-edit-post", (event) => {
         event.preventDefault;
         const itemId = event.target.closest("li").id;
-        console.log(itemId);
-        // const retrievedItem = JSON.parse(getItemById(itemId));
-        // console.log(retrievedItem);
-        //delete current view
+        // delete current view
         deleteView();
-        // render edit post page
-        alert(getItemById(itemId));
-        // renderView(editPostPage());
-        //check to see if fields change
-
-        // update changed fields with put request
-        $.ajax({
-            type: 'PUT',
-            url: `/edit/post/${itemId}`,
-            data: {name: "12345fgr"},
-            success: function(res){
-                console.log("PUT worked!");
-            }
-        });
+        //render edit page with appropiate item to edit
+        renderItemToEdit(itemId);
+        //attach object id for reference
+        // console.log(itemId.toString());
+        $(".edit-layout").attr('id', `${itemId.toString()}`);
     });
 }
 
@@ -382,6 +395,7 @@ function app() {
     postItemForSale();
     deleteUserPostFromDashboard();
     editPost();
+    makeChanges();
 }
 
 $(app);
