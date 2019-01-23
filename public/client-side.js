@@ -129,8 +129,8 @@ function signupPage() {
                 </label>
                 <p>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
                 <div class="clearfix">
+                    <button type="button" class="js-create-user-btn">create user</button>    
                     <button type="button" class="js-cancel-btn">Cancel</button>
-                    
                 </div>
             </div>
         </form>
@@ -328,7 +328,7 @@ function editPostPage(item) {
     return `
         <section class="edit-layout" id="">
             <div class="item-image-edit-post">
-                <img src="${item.image}"/>
+                <img class="item-edit" src="${item.image}" id="${item["_id"]}"/>
             </div>
         <form class="js-edit-form">
             <label for="name">Name</label>
@@ -348,6 +348,17 @@ function editPostPage(item) {
     `;
 }
 
+function createDefinedObject(obj) {
+    return Object.keys(obj).reduce((acc, key) => {
+      console.log(acc);
+      // let newObj = {};
+      if(obj[key]){
+        acc[key] = obj[key];
+      }
+      return acc;
+    }, {})
+  }
+
 function makeChanges() {
     $(".js-app-container").on("click", ".js-make-changes", (event) => {
         event.preventDefault();
@@ -358,11 +369,13 @@ function makeChanges() {
             description: $(".js-edited-description").val(),
             shortDescription: $(".js-edited-shortDescription").val()
         }
+        const itemId = $(".item-edit").attr("id");
+        // console.log(itemId);
          // update changed fields with put request
          $.ajax({
             type: 'PUT',
             url: `/edit/post/${itemId}`,
-            data: formObject,
+            data: createDefinedObject(formObject),
             success: function(res){
                 console.log("PUT worked!");
             }
@@ -382,6 +395,10 @@ function editPost() {
         // console.log(itemId.toString());
         $(".edit-layout").attr('id', `${itemId.toString()}`);
     });
+}
+
+function createNewUser() {
+    $(".js-app-container").on("click", ".js-js-create-user-btn");
 }
 
 

@@ -19,8 +19,7 @@ const userSchema = mongoose.Schema({
     firstName: {type: String, required: true, default: ''},
     lastName: {type: String, required: true, default: ''},
     userName: {type: String, unique: true, required: true},
-    password: {type: String, required: true},
-    items: [itemSchema]
+    password: {type: String, required: true}
 });
 // user schema methods 
 userSchema.methods.serialize = function() {

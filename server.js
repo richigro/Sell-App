@@ -115,6 +115,20 @@ app.delete('/delete/post/:id', (req, res) => {
 
 });
 
+// crud for users
+app.post('sign-up/new-user/', (req, res) => {
+  User
+  .create({
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    userName: req.body.userName,
+    password: req.body.password
+  })
+  .then(user => res.status(201).json(user))
+  .catch(err => res.status(500).json({message: 'hi'}));
+});
+
+
 let server;
 
 function runServer(databaseUrl, port=PORT) {
