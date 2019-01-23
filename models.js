@@ -18,7 +18,8 @@ const itemSchema = mongoose.Schema({
 const userSchema = mongoose.Schema({
     firstName: {type: String, required: true, default: ''},
     lastName: {type: String, required: true, default: ''},
-    userName: {type: String, unique: true, required: true},
+    username: {type: String, unique: true, required: true},
+    email: {type: String, unique: true, required: true},
     password: {type: String, required: true}
 });
 // user schema methods 

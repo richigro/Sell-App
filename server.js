@@ -116,18 +116,28 @@ app.delete('/delete/post/:id', (req, res) => {
 });
 
 // crud for users
-app.post('sign-up/new-user/', (req, res) => {
+app.post('/sign-up', (req, res) => {
+  console.log("helllooooooo");
+  const requiredFields = ['firstName', 'lastName', 'username', 'email', 'password'];
+  for (let i=0; i<requiredFields.length; i++) {
+    const field = requiredFields[i];
+    if (!(field in req.body)) {
+      const message = `Missing \`${field}\` in request body`
+      console.error(message);
+      return res.status(400).send(message);
+    }
+  }
+  console.log(req.body);
   User
   .create({
     firstName: req.body.firstName,
     lastName: req.body.lastName,
-    userName: req.body.userName,
+    username: req.body.username,
     password: req.body.password
   })
   .then(user => res.status(201).json(user))
-  .catch(err => res.status(500).json({message: 'hi'}));
+  .catch(err => res.status(500).json({message: 'internal server error'}));
 });
-
 
 let server;
 

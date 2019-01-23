@@ -107,34 +107,33 @@ function productDetailPage(item){
 function signupPage() {
     return `
     <div class="js-sign-up-page">
+        <div class="js-user-messages">
+        </div>
         <form action="#" class="sign-up-form">
             <div class="container">
                 <h1 class="sign-up-title-text">Sign Up</h1>
                 <p>Please fill in this form to create an account.</p>
                 <hr>
                 <label for="first-name"><b>First Name</b></label>
-                <input type="text" placeholder="name" name="first-name" required>
+                <input class="js-firstName" type="text" placeholder="name" name="first-name" required>
                 <label for="last-name"><b>Last Name</b></label>
-                <input type="text" placeholder="last name" name="last-name" required>
-                <label for="email"><b>Username</b></label>
-                <input type="text" placeholder="Enter Email" name="email" required>
+                <input class="js-lastName" type="text" placeholder="last name" name="last-name" required>
+                <label for="username"><b>Username</b></label>
+                <input class="js-username" type="text" placeholder="Choose a username" name="username" required>
                 <label for="email"><b>Email</b></label>
-                <input type="text" placeholder="Enter Email" name="email" required>
-                <label for="psw"><b>Password</b></label>
-                <input type="password" placeholder="Enter Password" name="psw" required>
-                <label for="psw-repeat"><b>Repeat Password</b></label>
-                <input type="password" placeholder="Repeat Password" name="psw-repeat" required>
-                <label>
-                    <input type="checkbox" checked="checked" name="remember" style="margin-bottom:15px"> Remember me
-                </label>
+                <input class="js-email" type="text" placeholder="Enter Email" name="email" required>
+                <label for="password"><b>Password</b></label>
+                <input class="js-password" type="password" placeholder="Enter Password" name="password" required>
+                <label for="password-repeat"><b>Repeat Password</b></label>
+                <input class="js-repeated-password" type="password" placeholder="Repeat Password" name="password-repeat" required>
                 <p>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
                 <div class="clearfix">
                     <button type="button" class="js-create-user-btn">create user</button>    
-                    <button type="button" class="js-cancel-btn">Cancel</button>
+                    
                 </div>
             </div>
         </form>
-        <button type="submit" class="js-signup-btn">Sign Up</button>
+        <button type="submit" class="js-signup-btn">Log in</button>
     </div>
   `;
 }
@@ -398,7 +397,35 @@ function editPost() {
 }
 
 function createNewUser() {
-    $(".js-app-container").on("click", ".js-js-create-user-btn");
+    $(".js-app-container").on("click", ".js-create-user-btn", (event) => {
+        event.preventDefault();
+        //check to see if both fields for password match
+        const password = $(".js-password").val();
+        const repeatedPassword = $(".js-repeated-password").val();
+        console.log(password, repeatedPassword);
+        if(password != repeatedPassword){
+            $(".js-user-messages").append(`<p>Both passwords must match, please try again.</p>`);
+            return new Error("passwords do not match");
+        }
+        let newUser = {
+            firstName: $(".js-firstName").val(),
+            lastName: $(".js-lastName").val(),
+            username: $(".js-username").val(),
+            email: $(".js-email").val(),
+            password: $(".js-password").val()
+        }
+        console.log(newUser);
+        $.ajax({
+            type:'POST',
+            url: '/sign-up',
+            data: createDefinedObject(newUser),
+            success: function(newUser){
+                console.log(newUser);
+                return true;
+                //take to login page
+            }
+        });
+    });
 }
 
 
@@ -413,6 +440,7 @@ function app() {
     deleteUserPostFromDashboard();
     editPost();
     makeChanges();
+    createNewUser();
 }
 
 $(app);
