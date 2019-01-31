@@ -10,7 +10,6 @@ const itemSchema = mongoose.Schema({
     price: {type: Number, required: true},
     description: {type: String, required: true},
     shortDescription: {type: String, required: true},
-    seller: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     publishedOn: Date
 });
 
@@ -22,6 +21,7 @@ const userSchema = mongoose.Schema({
     email: {type: String, unique: true, required: true},
     password: {type: String, required: true}
 });
+
 // user schema methods 
 userSchema.methods.serialize = function() {
     return {
@@ -30,6 +30,7 @@ userSchema.methods.serialize = function() {
       lastName: this.lastName || ''
     };
   };
+
   userSchema.methods.validatePassword = function(password) {
     return bcrypt.compare(password, this.password);
   };
@@ -38,7 +39,6 @@ userSchema.methods.serialize = function() {
     return bcrypt.hash(password, 10);
   };
 
-//pending serialization 
 itemSchema.methods.serialize = function() {
     return {
         id: this._id,

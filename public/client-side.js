@@ -128,14 +128,39 @@ function signupPage() {
                 <input class="js-repeated-password" type="password" placeholder="Repeat Password" name="password-repeat" required>
                 <p>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
                 <div class="clearfix">
-                    <button type="button" class="js-create-user-btn">create user</button>    
-                    
+                    <button type="button" class="js-create-user-btn">create user</button>
+                    <p>Do you already have an Account? Login here</p>
+                    <button type="submit" class="js-login-page-btn">Log in</button>    
                 </div>
             </div>
         </form>
-        <button type="submit" class="js-signup-btn">Log in</button>
     </div>
   `;
+}
+
+function loginPage() {
+    return `
+    <div class="js-login-page login-page">
+        <div class="js-user-messages-login">
+        </div>
+        <form class="login-form">
+            <h1 class="sign-up-title-text">Login</h1>
+            <label for="username"><b>Username</b></label>
+            <input class="js-username-login" type="text" placeholder="Choose a username" name="username" required>
+            <label for="password"><b>Password</b></label>
+            <input class="js-password-login" type="password" placeholder="Enter Password" name="password" required>
+            <button type="submit" class="js-login-btn">Log in</button>
+        </form>
+    </div>
+    `;
+}
+
+function loadLoginPage() {
+    $(".js-app-container").on("click", ".js-login-page-btn", (event) => {
+        event.preventDefault;
+        deleteView();
+        renderView(loginPage());
+    });
 }
 
 function loadandAppendUserPostedItems() {
@@ -211,12 +236,14 @@ function postItemForSale() {
             image: $("#image").val(),
             shortDescription: $("#shortDescription").val()
         }
+        console.log(itemToBePosted);
         $.ajax({
             type:'POST',
             url: '/post-for-sale',
             data: itemToBePosted,
             success: function(newItem){
                 console.log(newItem);
+                //reload updated page
             }
         });
     });
@@ -230,11 +257,25 @@ function makeNewPost() {
 }
 
 function displayUserAccount() {
-   $(".js-app-container").on("click", ".js-signup-btn", (event) => {
-    console.log("wal-e"); 
-    //delete current view
-     deleteView();
-     renderView(generateAccountPage());
+   $(".js-app-container").on("click", ".js-login-btn", (event) => {
+    event.preventDefault();
+    //get user's entered password
+    const username = $(".js-username-login").val();
+    const password = $(".js-password-login").val();
+    // console.log({password, username});
+        $.ajax({
+            url: '/login',
+            type: 'POST',
+            data: {password, username},
+            success: function () {
+                //delete current view
+                deleteView();
+                renderView(generateAccountPage());
+            },
+            error: function () {
+                console.log("There was an error handling login");
+            }
+        });
    });
 }
 
@@ -266,13 +307,11 @@ function findItemById(itemList, itemId) {
     return foundItem;
 }
 
-
 function showItemDetails(){
     $(".js-app-container").on("click", ".js-item", (event) => {
         // deletes what is on current view
         deleteView();
         const itemId = ((event.target).closest("div").id);
-        // console.log(itemId);
         $.ajax({
             url: `/for-sale/${itemId}`,
             success: function(res) {
@@ -349,8 +388,6 @@ function editPostPage(item) {
 
 function createDefinedObject(obj) {
     return Object.keys(obj).reduce((acc, key) => {
-      console.log(acc);
-      // let newObj = {};
       if(obj[key]){
         acc[key] = obj[key];
       }
@@ -361,7 +398,6 @@ function createDefinedObject(obj) {
 function makeChanges() {
     $(".js-app-container").on("click", ".js-make-changes", (event) => {
         event.preventDefault();
-
         const formObject = {
             name: $(".js-edited-name").val(),
             price: $(".js-edited-price").val(),
@@ -369,7 +405,6 @@ function makeChanges() {
             shortDescription: $(".js-edited-shortDescription").val()
         }
         const itemId = $(".item-edit").attr("id");
-        // console.log(itemId);
          // update changed fields with put request
          $.ajax({
             type: 'PUT',
@@ -391,7 +426,6 @@ function editPost() {
         //render edit page with appropiate item to edit
         renderItemToEdit(itemId);
         //attach object id for reference
-        // console.log(itemId.toString());
         $(".edit-layout").attr('id', `${itemId.toString()}`);
     });
 }
@@ -433,6 +467,7 @@ function app() {
     showHomePage();
     showItemDetails();
     goToHomePage();
+    loadLoginPage();
     loginToAccount();
     displayUserAccount();
     makeNewPost();

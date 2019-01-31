@@ -68,7 +68,6 @@ app.post('/post-for-sale', (req, res) => {
       description: req.body.description,
       image: req.body.image,
       shortDescription: req.body.shortDescription,
-      seller: sellerId,
       publishedOn: new Date()
     })
     .then(
@@ -133,10 +132,34 @@ app.post('/sign-up', (req, res) => {
     firstName: req.body.firstName,
     lastName: req.body.lastName,
     username: req.body.username,
-    password: req.body.password
+    password: req.body.password,
+    email: req.body.email
   })
   .then(user => res.status(201).json(user))
   .catch(err => res.status(500).json({message: 'internal server error'}));
+});
+
+app.post('/login', (req, res) => {
+  const username = req.body.username;
+  const password = req.body.password;
+  // let userId;
+ console.log("hi");
+ console.log({username, password});
+User
+.find({username: username})
+.then(user => {
+  console.log(user.password);
+  if(user.password === password){
+    return res.status(200).json({message: "Successful Login"}); 
+  };
+  return Promise.reject({
+    code: 422,
+    reason: 'ValidationError',
+    message: 'Invalid password',
+    location: 'password'
+  });
+})
+.catch(err => res.status(500).json({message: "something went wrong server"}));
 });
 
 let server;
