@@ -236,14 +236,14 @@ function postItemForSale() {
             image: $("#image").val(),
             shortDescription: $("#shortDescription").val()
         }
-        console.log(itemToBePosted);
         $.ajax({
             type:'POST',
             url: '/post-for-sale',
             data: itemToBePosted,
             success: function(newItem){
-                console.log(newItem);
                 //reload updated page
+                deleteView();
+                generateAccountPage();
             }
         });
     });
@@ -263,19 +263,21 @@ function displayUserAccount() {
     const username = $(".js-username-login").val();
     const password = $(".js-password-login").val();
     // console.log({password, username});
-        $.ajax({
-            url: '/login',
-            type: 'POST',
-            data: {password, username},
-            success: function () {
-                //delete current view
-                deleteView();
+        // $.ajax({
+        //     url: '/login',
+        //     type: 'POST',
+        //     data: {password, username},
+        //     success: function () {
+        //         //delete current view
+        //         deleteView();
+        //         renderView(generateAccountPage());
+        //     },
+        //     error: function () {
+        //         console.log("There was an error handling login");
+        //     }
+        // });
+        deleteView();
                 renderView(generateAccountPage());
-            },
-            error: function () {
-                console.log("There was an error handling login");
-            }
-        });
    });
 }
 
@@ -288,7 +290,6 @@ function loginToAccount() {
 }
 
 function goToHomePage(){
-    // console.log("you say hi and i say..");
     $(".js-home-button").on("click", (event) => {
         deleteView();
         showHomePage();
@@ -309,13 +310,11 @@ function findItemById(itemList, itemId) {
 
 function showItemDetails(){
     $(".js-app-container").on("click", ".js-item", (event) => {
-        // deletes what is on current view
         deleteView();
         const itemId = ((event.target).closest("div").id);
         $.ajax({
             url: `/for-sale/${itemId}`,
             success: function(res) {
-                // console.log(res);
                 renderView(productDetailPage(res));
             }
         });
@@ -326,14 +325,13 @@ function deleteUserPostFromDashboard() {
     $(".js-app-container").on("click", ".js-delete-post", (event) => {
         event.preventDefault();
         const itemId = event.target.closest("li").id;
-        console.log(itemId);
         // ajax call to delete endpoint api
         $.ajax({
             type: 'DELETE',
             url: `/delete/post/${itemId}`,
             success: function(res) {
-                console.log(res);
-                //refresh dashboard
+                //reload dashboard
+                deleteView();
                 generateAccountPage();
             }
         });
@@ -356,7 +354,6 @@ function renderItemToEdit(itemId){
         type: 'GET',
         url: `/for-sale/${itemId}`,
         success: function(item) {
-            console.log(item);
             return renderView(editPostPage(item));
         }
     });
@@ -411,7 +408,8 @@ function makeChanges() {
             url: `/edit/post/${itemId}`,
             data: createDefinedObject(formObject),
             success: function(res){
-                console.log("PUT worked!");
+                deleteView();
+                generateAccountPage();
             }
         });
     });
@@ -436,7 +434,7 @@ function createNewUser() {
         //check to see if both fields for password match
         const password = $(".js-password").val();
         const repeatedPassword = $(".js-repeated-password").val();
-        console.log(password, repeatedPassword);
+        // console.log(password, repeatedPassword);
         if(password != repeatedPassword){
             $(".js-user-messages").append(`<p>Both passwords must match, please try again.</p>`);
             return new Error("passwords do not match");
@@ -448,13 +446,13 @@ function createNewUser() {
             email: $(".js-email").val(),
             password: $(".js-password").val()
         }
-        console.log(newUser);
+        // console.log(newUser);
         $.ajax({
             type:'POST',
             url: '/sign-up',
             data: createDefinedObject(newUser),
             success: function(newUser){
-                console.log(newUser);
+                // console.log(newUser);
                 return true;
                 //take to login page
             }
