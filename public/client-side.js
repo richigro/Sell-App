@@ -110,7 +110,6 @@ function signupPage() {
         <div class="js-user-messages">
         </div>
         <form action="#" class="sign-up-form">
-            <div class="container">
                 <h1 class="sign-up-title-text">Sign Up</h1>
                 <p>Please fill in this form to create an account.</p>
                 <hr>
@@ -127,13 +126,12 @@ function signupPage() {
                 <label for="password-repeat"><b>Repeat Password</b></label>
                 <input class="js-repeated-password" type="password" placeholder="Repeat Password" name="password-repeat" required>
                 <p>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
-                <div class="clearfix">
-                    <button type="button" class="js-create-user-btn">create user</button>
-                    <p>Do you already have an Account? Login here</p>
-                    <button type="submit" class="js-login-page-btn">Log in</button>    
-                </div>
-            </div>
+                <button type="button" class="js-create-user-btn">create user</button>
         </form>
+        <div class="clearfix">
+            <p>Do you already have an Account? Login here</p>
+            <button type="submit" class="js-login-page-btn">Log in</button>    
+        </div>
     </div>
   `;
 }
@@ -283,7 +281,6 @@ function displayUserAccount() {
 
 function loginToAccount() {
     $(".js-login-page").on("click", (event) => {
-        console.log("hi");
         deleteView();
         renderView(signupPage);
     });
@@ -455,6 +452,10 @@ function createNewUser() {
                 // console.log(newUser);
                 return true;
                 //take to login page
+            },
+            error: function() {
+                $(".js-user-messages").empty();
+                $(".js-user-messages").append(`<p>Please fill out all fields</p>`);
             }
         });
     });
