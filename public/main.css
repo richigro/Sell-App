@@ -27,15 +27,42 @@ body {
 }
 
 .item-container{
+    display: block;
     margin: 10px auto;
-    height: 200px;
+    height: 300px;
     width: 80%;
+    max-width: 400px;
+    margin: 10px;
+    margin: 10px auto;
     border: 1px solid black;
+    float: left;
 }
 
+
+.item-image-home {
+    height: 200px;
+    margin: 0 auto;
+    width: auto;
+    display: block;
+}
+
+.item-info-home{
+    display: block;
+}
 .item-title {
     text-align: center;
     font-size: 32px;
+}
+
+.item-price-home{
+    height: 10%;
+    width: auto;
+    border-right: 1px solid black;
+    border-bottom: 1px solid black;
+    display: inline-block;
+    padding-bottom: 0px;
+    padding: 2px;
+    
 }
 
 .app-links {
@@ -63,9 +90,20 @@ body {
      overflow: hidden;
  }
 
- .sign-up-form {
+ label {
+     display: block;
+     padding: 10px;
+ }
+
+ input {
+     margin-bottom: 30px;
      width: 80%;
+ }
+
+ .sign-up-form {
+     width: 60%;
      height: auto;
+     padding: 20px 10px 20px 10px;
      margin: 0 auto;
      margin-top: 5%;
      border: solid black 1px;
@@ -74,4 +112,26 @@ body {
  .sign-up-title-text{
      text-align: center;
      font-size: 32PX;
+     margin-bottom: 25px;
+ }
+
+ .login-form {
+    display: block;
+    margin: 0 auto;
+    margin-top: 100px;
+    border: 1px solid black;
+    width: 60%;
+    height: auto;
+ }
+
+ .item-preview{
+     display: inline-block;
+     height: 180px;
+     width: 80%;
+     border: 1px solid black;
+ }
+
+ .item-image-preview {
+     height: 100%;
+     width: 50%;
  }
