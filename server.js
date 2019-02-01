@@ -72,7 +72,6 @@ app.get('/for-sale/:id', (req, res) => {
       res.status(500).json({message: 'Something went wrong while getting item from server or db'});
     });
 });
-//get all items that belong to specific user
 
 // post for creating new items for sale
 app.post('/post-for-sale', (req, res) => {
@@ -149,7 +148,6 @@ app.post('/sign-up', (req, res) => {
       return res.status(400).send(message);
     }
   }
-  console.log(req.body);
   User
   .create({
     firstName: req.body.firstName,
