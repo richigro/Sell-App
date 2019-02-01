@@ -1,13 +1,13 @@
 {
   "name": "sell-app",
   "version": "1.0.0",
-  "description": "",
+  "description": "sell application",
   "main": "server.js",
   "scripts": {
     "test": "mocha",
     "dev": "nodemon server"
   },
-  "author": "",
+  "author": "Ricardo Guerrero",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
