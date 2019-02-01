@@ -74,7 +74,7 @@ function normalizeIsoDate(isoDate) {
 }
 
 
-// renders the home page takes data from api
+// renders the home page takes data from get enpoint
 function itemList(item){
     return `
         <div class="js-item item-container" id=${item['_id']}>
@@ -146,7 +146,7 @@ function loginPage() {
         <form class="login-form">
             <h1 class="sign-up-title-text">Login</h1>
             <label for="username"><b>Username</b></label>
-            <input class="js-username-login" type="text" placeholder="Choose a username" name="username" required>
+            <input class="js-username-login" type="text" placeholder="Enter username" name="username" required>
             <label for="password"><b>Password</b></label>
             <input class="js-password-login" type="password" placeholder="Enter Password" name="password" required>
             <button type="submit" class="js-login-btn">Log in</button>

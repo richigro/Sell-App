@@ -5,6 +5,35 @@ const morgan = require("morgan");
 const bodyParser = require('body-parser');
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
+// for development testing purpose only
+//not prod
+// const {Item} = require('./models');
+// const faker = require('faker');
+
+// function generateItemData() {
+//   return {
+//     name: faker.commerce.product(),
+//     price: Math.round(faker.commerce.price()),
+//     image: faker.image.imageUrl(),
+//     description: faker.lorem.paragraph(),
+//     shortDescription: faker.lorem.sentence(),
+//     publishedOn: new Date()
+//   }
+// } 
+
+
+// function seedItemData(req, res, next) {
+//   console.info('Seeding item data');
+//   const seedData = [];
+
+//   for (let i =0; i <= 10; i++) {
+//       seedData.push(generateItemData());
+//   }
+//   Item.insertMany(seedData);
+//   next();
+// }
+// app.use(seedItemData);
+//for testing only
 
 const {PORT, DATABASE_URL} = require('./config');
 const {Item} = require('./models');
@@ -101,17 +130,11 @@ app.put('/edit/post/:id', (req, res) => {
 
 
 app.delete('/delete/post/:id', (req, res) => {
-  const itemId = req.params.id
   console.log("deleting post now...");
   Item
-  .findByIdAndRemove(itemId)
-  .then(
-    res.status(204))
-  .catch( err => {
-    console.error(err);
-    res.status(500).json({message: "there was an error while deleting the post"});
-  });
-
+  .findByIdAndRemove(req.params.id)
+  .then(() => res.status(204).end())
+  .catch( err => res.status(500).json({message: "there was an error while deleting the post"}));
 });
 
 // crud for users
