@@ -167,12 +167,10 @@ describe('CRUD enpoints for items', function() {
                 .findOne()
                 .then(function(_item) {
                     item = _item;
-                    console.log(item.id);
                     return chai.request(app).delete(`/delete/post/${item.id}`);
                 })
                 .then(function(res) {
                     expect(res).to.have.status(204);
-                    console.log(item.id);
                     return Item.findById(item.id);
                 })
                 .then(function(_item) {
