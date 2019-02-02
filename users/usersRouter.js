@@ -5,11 +5,10 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const jsonParser = bodyParser.json();
 
-const {User} = require('../models');
+const {User} = require('./user-model');
 
-// crud for users
+//POST create new user
 router.post('/', (req, res) => {
-    console.log("helllooooooo");
     const requiredFields = ['firstName', 'lastName', 'username', 'email', 'password'];
     for (let i=0; i<requiredFields.length; i++) {
       const field = requiredFields[i];
@@ -31,12 +30,10 @@ router.post('/', (req, res) => {
     .catch(err => res.status(500).json({message: 'internal server error'}));
   });
   
+  //POST login new user
   router.post('/', (req, res) => {
     const username = req.body.username;
     const password = req.body.password;
-    // let userId;
-   console.log("hi");
-   console.log({username, password});
   User
   .find({username: username})
   .then(user => {

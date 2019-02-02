@@ -8,7 +8,7 @@ const faker = require('faker');
 const { TEST_DATABASE_URL } = require('../config');
 const { ITEMS_URL } = require('../config');
 const { app, runServer, closeServer} = require('../server');
-const {Item} = require('../models');
+const {Item} = require('../items/item-model');
 const expect = chai.expect;
 
 chai.use(chaiHttp);

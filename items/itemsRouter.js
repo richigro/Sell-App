@@ -1,7 +1,7 @@
 'use strict';
 const express = require('express');
 const router = express.Router();
-const {Item} = require('../models');
+const {Item} = require('./item-model');
 
 //GET all items for sale
 router.get('/', (req, res) => {
