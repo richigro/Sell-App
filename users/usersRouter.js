@@ -10,7 +10,7 @@ router.get('/', (req, res) => {
     .then(users => {
       res.json({
         users: users.map(
-          (user) => user.serialize())
+          (user) => user)
       });
     })
     .catch( err => {
