@@ -83,11 +83,11 @@ router.put('/:id', (req, res) => {
 
 //DELETE items by ID  
 router.delete('/:id', (req, res) => {
-  console.log("deleting post now...");
+  console.log("deleting item now...");
   Item
   .findByIdAndRemove(req.params.id)
   .then(() => res.status(204).end())
-  .catch( err => res.status(500).json({message: "there was an error while deleting the post"}));
+  .catch( err => res.status(500).json({message: "there was an error while deleting the item"}));
 });
 
 module.exports = router;
