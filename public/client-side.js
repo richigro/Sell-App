@@ -1,5 +1,8 @@
 "use strict";
 
+const ITEMS_URL = '/items';
+const USERS_URL = '/users';
+
 // appends a view to the app
 function renderView(view){
     $(".js-app-container").append(view);
@@ -11,7 +14,7 @@ function deleteView() {
 
 function showHomePage() {
     $.ajax({
-        url: '/for-sale',
+        url: ITEMS_URL,
         dataType: 'json',
         success: function(res) {
             res.items.forEach((item) => {
@@ -163,7 +166,7 @@ function loadLoginPage() {
 
 function loadandAppendUserPostedItems() {
     $.ajax({
-        url: '/for-sale',
+        url: ITEMS_URL,
         success: function(res) {
             res.items.forEach((item) => $(".js-user-posts").append(`<li id="${item["_id"]}" class="item-preview">
             <img class="item-image-preview" src="${item.image}" />
@@ -236,7 +239,7 @@ function postItemForSale() {
         }
         $.ajax({
             type:'POST',
-            url: '/post-for-sale',
+            url: ITEMS_URL,
             data: itemToBePosted,
             success: function(newItem){
                 //reload updated page
@@ -262,7 +265,7 @@ function displayUserAccount() {
     const password = $(".js-password-login").val();
     // console.log({password, username});
         // $.ajax({
-        //     url: '/login',
+        //     url: USERS_URL,
         //     type: 'POST',
         //     data: {password, username},
         //     success: function () {
@@ -310,7 +313,9 @@ function showItemDetails(){
         deleteView();
         const itemId = ((event.target).closest("div").id);
         $.ajax({
-            url: `/for-sale/${itemId}`,
+            //fix this
+            // fix this
+            url: `/items/${itemId}`,
             success: function(res) {
                 renderView(productDetailPage(res));
             }
@@ -325,7 +330,7 @@ function deleteUserPostFromDashboard() {
         // ajax call to delete endpoint api
         $.ajax({
             type: 'DELETE',
-            url: `/delete/post/${itemId}`,
+            url: `/items/${itemId}`,
             success: function(res) {
                 //reload dashboard
                 deleteView();
@@ -349,7 +354,7 @@ function changedFields(formObject) {
 function renderItemToEdit(itemId){
     $.ajax({
         type: 'GET',
-        url: `/for-sale/${itemId}`,
+        url: `/items/${itemId}`,
         success: function(item) {
             return renderView(editPostPage(item));
         }
@@ -402,7 +407,7 @@ function makeChanges() {
          // update changed fields with put request
          $.ajax({
             type: 'PUT',
-            url: `/edit/post/${itemId}`,
+            url: `/items/${itemId}`,
             data: createDefinedObject(formObject),
             success: function(res){
                 deleteView();
@@ -446,7 +451,7 @@ function createNewUser() {
         // console.log(newUser);
         $.ajax({
             type:'POST',
-            url: '/sign-up',
+            url: USERS_URL,
             data: createDefinedObject(newUser),
             success: function(newUser){
                 // console.log(newUser);
