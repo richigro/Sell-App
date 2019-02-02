@@ -5,11 +5,10 @@ const morgan = require("morgan");
 const bodyParser = require('body-parser');
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
+const {PORT, DATABASE_URL} = require('./config');
 //routes 
 const itemsRouter = require('./items/itemsRouter');
 const usersRouter = require('./users/usersRouter');
-//configuration variables
-const {PORT, DATABASE_URL} = require('./config');
 //middleware
 app.use(morgan('common'));
 app.use(express.static('public'));

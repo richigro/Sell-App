@@ -6,8 +6,9 @@ mongoose.Promise = global.Promise;
 const faker = require('faker');
 
 const { TEST_DATABASE_URL } = require('../config');
+const { ITEMS_URL } = require('../config');
 const { app, runServer, closeServer} = require('../server');
-const {User, Item} = require('../models');
+const {Item} = require('../models');
 const expect = chai.expect;
 
 chai.use(chaiHttp);
@@ -59,7 +60,7 @@ describe('CRUD enpoints for items', function() {
         it("Should return all items currently for sale on database", function() {
             let res;
             return chai.request(app)
-            .get("/for-sale")
+            .get(ITEMS_URL)
             .then(function(_res) {
                 res = _res;
                 expect(res).to.have.status(200);
@@ -76,7 +77,7 @@ describe('CRUD enpoints for items', function() {
         it("should return items with the correct fields", function() {
             let resItem;
             return chai.request(app)
-            .get("/for-sale")
+            .get(ITEMS_URL)
             .then(function(res) {
                 expect(res).to.have.status(200);
                 expect(res).to.be.json;
@@ -110,7 +111,7 @@ describe('CRUD enpoints for items', function() {
             const newItem = generateItemData();
         
             return chai.request(app)
-            .post('/post-for-sale')
+            .post(ITEMS_URL)
             .send(newItem)
             .then(function(res) {
                 expect(res).to.have.status(201);
@@ -145,7 +146,7 @@ describe('CRUD enpoints for items', function() {
                 .then(function(item) {
                     updateData.id = item['_id'];
                     return chai.request(app)
-                        .put(`/edit/post/${updateData.id}`)
+                        .put(`/items/${updateData.id}`)
                         .send(updateData);
                 })
                 .then(function(res) {
@@ -167,7 +168,7 @@ describe('CRUD enpoints for items', function() {
                 .findOne()
                 .then(function(_item) {
                     item = _item;
-                    return chai.request(app).delete(`/delete/post/${item.id}`);
+                    return chai.request(app).delete(`/items/${item.id}`);
                 })
                 .then(function(res) {
                     expect(res).to.have.status(204);
