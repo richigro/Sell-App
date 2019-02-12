@@ -10,7 +10,7 @@ const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
 //destructing and renaming variables
-const { router: usersRouter } = require('./users/usersRouter');
+// const { router: usersRouter } = require('./users/usersRouter');
 const { localStrategy, jwtStrategy } = require('./auth/strategies');
 const {router: authRouter} = require('./auth/authRouter');
 
@@ -18,7 +18,7 @@ const {router: authRouter} = require('./auth/authRouter');
 const {PORT, DATABASE_URL} = require('./config');
 //routes 
 const itemsRouter = require('./items/itemsRouter');
-// const usersRouter = require('./users/usersRouter');
+const usersRouter = require('./users/usersRouter');
 //middleware
 app.use(morgan('common'));
 //CORS
@@ -37,7 +37,7 @@ app.use(bodyParser.json());
 // CRUD routes for items
 app.use('/items', itemsRouter);
 //CRUD routes for users
-app.use('/users', usersRouter);
+// app.use('/users', usersRouter);
 app.use('/api/users/', usersRouter);
 
 app.use('/auth', authRouter);

@@ -7,6 +7,7 @@ const itemSchema = mongoose.Schema({
     name: {type: String, required: true},
     price: {type: Number, required: true},
     description: {type: String, required: true},
+    seller: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     shortDescription: {type: String, required: true},
     publishedOn: Date
 });
