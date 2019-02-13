@@ -38,7 +38,7 @@ app.use(bodyParser.json());
 app.use('/items', itemsRouter);
 //CRUD routes for users
 // app.use('/users', usersRouter);
-app.use('/api/users/', usersRouter);
+app.use('/users', usersRouter);
 
 app.use('/auth', authRouter);
 
