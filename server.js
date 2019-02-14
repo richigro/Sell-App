@@ -39,7 +39,6 @@ app.use('/items', itemsRouter);
 //CRUD routes for users
 // app.use('/users', usersRouter);
 app.use('/users', usersRouter);
-
 app.use('/auth', authRouter);
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
