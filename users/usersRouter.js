@@ -33,27 +33,27 @@ router.get('/:id', (req, res) => {
 });
 
 //POST create new user
-router.post('/', (req, res) => {
-    const requiredFields = ['firstName', 'lastName', 'username', 'email', 'password'];
-    for (let i=0; i<requiredFields.length; i++) {
-      const field = requiredFields[i];
-      if (!(field in req.body)) {
-        const message = `Missing \`${field}\` in request body`
-        console.error(message);
-        return res.status(400).send(message);
-      }
-    }
-    User
-    .create({
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      username: req.body.username,
-      password: req.body.password,
-      email: req.body.email
-    })
-    .then(user => res.status(201).json(user))
-    .catch(err => res.status(500).json({message: 'internal server error'}));
-  });
+// router.post('/', (req, res) => {
+//     const requiredFields = ['firstName', 'lastName', 'username', 'email', 'password'];
+//     for (let i=0; i<requiredFields.length; i++) {
+//       const field = requiredFields[i];
+//       if (!(field in req.body)) {
+//         const message = `Missing \`${field}\` in request body`
+//         console.error(message);
+//         return res.status(400).send(message);
+//       }
+//     }
+//     User
+//     .create({
+//       firstName: req.body.firstName,
+//       lastName: req.body.lastName,
+//       username: req.body.username,
+//       password: req.body.password,
+//       email: req.body.email
+//     })
+//     .then(user => res.status(201).json(user))
+//     .catch(err => res.status(500).json({message: 'internal server error'}));
+//   });
   
   //POST new user
   router.post('/', jsonParser, (req, res) => {
@@ -181,26 +181,31 @@ router.post('/', (req, res) => {
         res.status(500).json({code: 500, message: 'Internal server error'});
       });
   });
+
   //POST login new user
-  // router.post('/', (req, res) => {
-  //   const username = req.body.username;
-  //   const password = req.body.password;
-  // User
-  // .find({username: username})
-  // .then(user => {
-  //   console.log(user.password);
-  //   if(user.password === password){
-  //     return res.status(200).json({message: "Successful Login"}); 
-  //   };
-  //   return Promise.reject({
-  //     code: 422,
-  //     reason: 'ValidationError',
-  //     message: 'Invalid password',
-  //     location: 'password'
-  //   });
-  // })
-  // .catch(err => res.status(500).json({message: "something went wrong server"}));
-  // });
+  router.post('/login', (req, res) => {
+    const username = req.body.username;
+    const password = req.body.password;
+    // User.hashPassword(req.body.password)
+    // .then()
+  User
+  .find({username: username})
+  .then(user => {
+    // console.log(user.password);
+    // User.decypt
+    user.validate(password);
+    if(user.password === password){
+      return res.status(200).json({message: "Successful Login"}); 
+    };
+    return Promise.reject({
+      code: 422,
+      reason: 'ValidationError',
+      message: 'Invalid password',
+      location: 'password'
+    });
+  })
+  .catch(err => res.status(500).json({message: "something went wrong server"}));
+  });
 
 //PUT update user's information
 router.put('/:id', (req, res) => {

@@ -11,7 +11,8 @@ mongoose.Promise = global.Promise;
 
 //destructing and renaming variables
 // const { router: usersRouter } = require('./users/usersRouter');
-const { localStrategy, jwtStrategy } = require('./auth/strategies');
+const localStrategy  = require('./passport/local');
+const jwtStrategy = require('./passport/jwt');
 const {router: authRouter} = require('./auth/authRouter');
 
 // const {JWT_SECRET} = process.env;
@@ -34,6 +35,8 @@ app.use(function (req, res, next){
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
+passport.use(localStrategy);
+passport.use(jwtStrategy);
 // CRUD routes for items
 app.use('/items', itemsRouter);
 //CRUD routes for users
@@ -44,9 +47,9 @@ app.use('/auth', authRouter);
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
 // A protected endpoint which needs a valid JWT to access it
-app.get('/api/protected', jwtAuth, (req, res) => {
+app.get('/dashboard', jwtAuth, (req, res) => {
   return res.json({
-    data: 'rosebud'
+    data: req.user
   });
 });
 

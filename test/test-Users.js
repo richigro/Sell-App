@@ -97,12 +97,10 @@ describe('CRUD enpoints for users', function() {
                 return User.findById(resUser.id);
             })
             .then(function(user) {
-                expect(resUser['_id']).to.equal(user.id);
+                expect(resUser.id).to.equal(user.id);
                 expect(resUser.firstName).to.equal(user.firstName);
                 expect(resUser.lastName).to.equal(user.lastName);
                 expect(resUser.username).to.equal(user.username);
-                expect(resUser.password).to.equal(user.password);
-                expect(resUser.email).to.equal(user.email);
             });
         });
     });

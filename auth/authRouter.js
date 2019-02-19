@@ -15,6 +15,15 @@ const createAuthToken = function(user) {
     });
   };
 
+
+  
+const localAuth = passport.authenticate('local', { session: false, failWithError: true });
+
+router.post('/login', localAuth, (req, res) => {
+   const authToken = createAuthToken(req.user); 
+   res.json({ authToken }); 
+  })
+    
 const jwtAuth = passport.authenticate('jwt', {session: false});
 
 // The user exchanges a valid JWT for a new one with a later expiration
