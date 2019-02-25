@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 const {Item} = require('./item-model');
-const {User} = require('../users/user-model');
+// const {User} = require('../users/user-model');
 const passport = require('passport');
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
@@ -10,6 +10,8 @@ const jwtAuth = passport.authenticate('jwt', { session: false });
 router.get('/', (req, res) => {
     Item
       .find()
+      .populate('seller')
+      .exec()
       .then(items => {
         res.json({
           items: items.map(
@@ -26,6 +28,8 @@ router.get('/', (req, res) => {
 router.get('/:id', (req, res) => {
     Item
       .findById(req.params.id)
+      .populate('seller')
+      .exec()
       .then((item) => res.json(item))
       .catch( err => {
         console.error(err);
@@ -45,7 +49,6 @@ router.post('/',  jwtAuth, (req, res) => {
         return res.status(400).send(message);
       }
     }
-    // populate item with seller
       Item
       .create({
         name: req.body.name,
@@ -57,12 +60,7 @@ router.post('/',  jwtAuth, (req, res) => {
         publishedOn: new Date()
       })
       .then(
-        (item) => {
-        User.find({'_id': req.user['_id']})
-        .populate('seller', "name")
-        .exec();
-        res.status(201).json(item); 
-      })
+        (item) => res.status(201).json(item))
       .catch( err => {
         console.error(err);
         res.status(500).json({message: 'Internal server error from POST route'});

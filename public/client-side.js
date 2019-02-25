@@ -8,18 +8,21 @@ function renderView(view){
     $(".js-app-container").append(view);
 }
 
-function deleteView() {
+function deleteCurrentView() {
     $(".js-app-container").empty();
 }
 
-function showHomePage() {
+function getAllItemsForSale() {
     $.ajax({
         url: ITEMS_URL,
         dataType: 'json',
         success: function(res) {
             res.items.forEach((item) => {
-                renderView(itemList(item));
+                renderView(itemContainer(item));
             });
+        },
+        error: function(err) {
+            console.log(err, 'no items could be retrived from db');
         }
     });
 }
@@ -78,7 +81,7 @@ function normalizeIsoDate(isoDate) {
 
 
 // renders the home page takes data from get enpoint
-function itemList(item){
+function itemContainer(item){
     return `
         <div class="js-item item-container" id=${item['_id']}>
             <div class="item-price-home">$${item.price}</div>
@@ -87,7 +90,7 @@ function itemList(item){
         </div>`;    
 }
 
-function productDetailPage(item){
+function showProductDetails(item){
     return `
         <main role="main">
             <h1>${item.name}</h1>
@@ -98,16 +101,14 @@ function productDetailPage(item){
             </div>
             <div class="seller-info">
                 <h1>Contact Seller</h1>
-                <p>Seller: ${1}</p>
-                <p>email: </p>
-                <p>phone: </p>
-                <p>Location: </p>
+                <p>Seller: ${item.seller.username}</p>
+                <p>email: ${item.seller.email}</p>
             </div>
         </main>
     `;
 }
 
-function signupPage() {
+function signupForm() {
     return `
     <div class="js-sign-up-page">
         <div class="js-user-messages">
@@ -139,7 +140,7 @@ function signupPage() {
   `;
 }
 
-function loginPage() {
+function loginForm() {
     return `
     <div class="js-login-page login-page">
         <div class="js-user-messages-login">
@@ -156,11 +157,11 @@ function loginPage() {
     `;
 }
 
-function loadLoginPage() {
+function getLoginForm() {
     $(".js-app-container").on("click", ".js-login-page-btn", (event) => {
-        event.preventDefault;
-        deleteView();
-        renderView(loginPage());
+        event.preventDefault();
+        deleteCurrentView();
+        renderView(loginForm());
     });
 }
 
@@ -170,6 +171,7 @@ function loadandAppendUserPostedItems() {
         success: function(res) {
             res.items.forEach((item) => $(".js-user-posts").append(`<li id="${item["_id"]}" class="item-preview">
             <img class="item-image-preview" src="${item.image}" />
+            <p>${item.price}</p>
             <p>${item.name}</p>
             <p>${item.shortDescription}</p>
             <div><button class="js-delete-post">Delete post</button></div>
@@ -180,7 +182,7 @@ function loadandAppendUserPostedItems() {
     });
 }
 
-function dashboardStructure() {
+function userDashboard() {
     return `
     <div class="account-page">
         <div class="profile">
@@ -202,11 +204,11 @@ function dashboardStructure() {
 }
 
 function generateAccountPage() {
-    renderView(dashboardStructure());
+    renderView(userDashboard());
     loadandAppendUserPostedItems();
 }
 
-function newPostPage() {
+function newItemForm() {
     return `
         <section class="post-layout">
             <form class="post-form">
@@ -245,26 +247,28 @@ function postItemForSale() {
             success: function(newItem){
                 //reload updated page
                 // console.log(newItem);
-                deleteView();
+                deleteCurrentView();
                 generateAccountPage();
             }
         });
     });
 }
 
-function makeNewPost() {
+function postNewItem() {
     $(".js-app-container").on("click", ".js-make-a-post", (event) => {
-        deleteView();
-        renderView(newPostPage());
+        deleteCurrentView();
+        renderView(newItemForm());
     });
 }
 
-function displayUserAccount() {
+function requestTokenToLogin() {
    $(".js-app-container").on("click", ".js-login-btn", (event) => {
     event.preventDefault();
     //get user's entered password
     const username = $(".js-username-login").val();
     const password = $(".js-password-login").val();
+    console.log(username);
+    console.log(password);
         $.ajax({
             url: '/auth/login',
             type: 'POST',
@@ -276,7 +280,7 @@ function displayUserAccount() {
                 // set user token in local storage
                 localStorage.setItem('userToken', userToken);
                 //run function to access protected dashboard with user token
-                dashboardLoginWithToken(userToken);
+                loginWithToken(userToken);
             },
             error: function () {
                 console.log("There was an error handling login");
@@ -285,14 +289,15 @@ function displayUserAccount() {
    });
 }
 
-function dashboardLoginWithToken(token) {
+function loginWithToken(token) {
     $.ajax({
-        url: '',
+        url: '/dashboard',
         type: 'GET',
         data: token,
-        success: function () {
+        success: function(loggedUser) {
             // if authorized by endpoint load dashboard
-            deleteView();
+            console.log(loggedUser);
+            deleteCurrentView();
             renderView(generateAccountPage());
         },
         error: function() {
@@ -301,23 +306,23 @@ function dashboardLoginWithToken(token) {
     });
 }
 
-function loginToAccount() {
-    $(".js-login-page").on("click", (event) => {
-        deleteView();
-        renderView(signupPage);
-    });
-}
+// function loginToAccount() {
+//     $(".js-login-page").on("click", (event) => {
+//         deleteCurrentView();
+//         renderView(signupForm);
+//     });
+// }
 
 function goToHomePage(){
     $(".js-home-button").on("click", (event) => {
-        deleteView();
-        showHomePage();
+        deleteCurrentView();
+        getAllItemsForSale();
     });
 }
 
-function findItemById(itemList, itemId) {
+function findItemById(itemContainer, itemId) {
     let foundItem = {};
-    itemList.forEach((item) => {
+    itemContainer.forEach((item) => {
         for(let keyId in item) {
             if(item[keyId] === itemId) {
                 foundItem = item;
@@ -329,20 +334,20 @@ function findItemById(itemList, itemId) {
 
 function showItemDetails(){
     $(".js-app-container").on("click", ".js-item", (event) => {
-        deleteView();
+        deleteCurrentView();
         const itemId = ((event.target).closest("div").id);
         $.ajax({
             //fix this
             // fix this
             url: `/items/${itemId}`,
             success: function(res) {
-                renderView(productDetailPage(res));
+                renderView(showProductDetails(res));
             }
         });
     });
 }
 
-function deleteUserPostFromDashboard() {
+function deleteItem() {
     $(".js-app-container").on("click", ".js-delete-post", (event) => {
         event.preventDefault();
         const itemId = event.target.closest("li").id;
@@ -352,14 +357,14 @@ function deleteUserPostFromDashboard() {
             url: `/items/${itemId}`,
             success: function(res) {
                 //reload dashboard
-                deleteView();
+                deleteCurrentView();
                 generateAccountPage();
             }
         });
     });
 }
 
-function changedFields(formObject) {
+function checkChangedFields(formObject) {
     // const a = $(".js-name").attr("placeholder");
     const itemFileds = ['name', 'price', 'description', 'shortDescription'];
     const itemsToChange = [];
@@ -370,17 +375,17 @@ function changedFields(formObject) {
     }
 }
 
-function renderItemToEdit(itemId){
+function getItemForEdit(itemId){
     $.ajax({
         type: 'GET',
         url: `/items/${itemId}`,
         success: function(item) {
-            return renderView(editPostPage(item));
+            return renderView(editItemForm(item));
         }
     });
 }
 
-function editPostPage(item) {
+function editItemForm(item) {
     return `
         <section class="edit-layout" id="">
             <div class="item-image-edit-post">
@@ -413,7 +418,7 @@ function createDefinedObject(obj) {
     }, {})
   }
 
-function makeChanges() {
+function changeItemValues() {
     $(".js-app-container").on("click", ".js-make-changes", (event) => {
         event.preventDefault();
         const formObject = {
@@ -429,21 +434,21 @@ function makeChanges() {
             url: `/items/${itemId}`,
             data: createDefinedObject(formObject),
             success: function(res){
-                deleteView();
+                deleteCurrentView();
                 generateAccountPage();
             }
         });
     });
 }
 
-function editPost() {
+function editItem() {
     $(".js-app-container").on("click", ".js-edit-post", (event) => {
         event.preventDefault;
         const itemId = event.target.closest("li").id;
         // delete current view
-        deleteView();
+        deleteCurrentView();
         //render edit page with appropiate item to edit
-        renderItemToEdit(itemId);
+        getItemForEdit(itemId);
         //attach object id for reference
         $(".edit-layout").attr('id', `${itemId.toString()}`);
     });
@@ -474,12 +479,14 @@ function createNewUser() {
             data: createDefinedObject(newUser),
             success: function(newUser){
                 // console.log(newUser);
-                return true;
+                // return true;
                 //take to login page
+                deleteCurrentView();
+                renderView(loginForm());
             },
-            error: function() {
+            error: function(error) {
                 $(".js-user-messages").empty();
-                $(".js-user-messages").append(`<p>Please fill out all fields</p>`);
+                $(".js-user-messages").append(`<p>${error}</p>`);
             }
         });
     });
@@ -487,17 +494,17 @@ function createNewUser() {
 
 
 function app() {
-    showHomePage();
+    getAllItemsForSale();
     showItemDetails();
     goToHomePage();
-    loadLoginPage();
-    loginToAccount();
-    displayUserAccount();
-    makeNewPost();
+    getLoginForm();
+    //loginToAccount();
+    requestTokenToLogin();
+    postNewItem();
     postItemForSale();
-    deleteUserPostFromDashboard();
-    editPost();
-    makeChanges();
+    deleteItem();
+    editItem();
+    changeItemValues();
     createNewUser();
 }
 

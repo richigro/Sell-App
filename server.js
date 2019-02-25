@@ -1,5 +1,4 @@
 'use strict';
-//requiring .env file
 require('dotenv').config();
 const express = require('express');
 const app = express();
@@ -10,14 +9,12 @@ const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
 //destructing and renaming variables
-// const { router: usersRouter } = require('./users/usersRouter');
 const localStrategy  = require('./passport/local');
 const jwtStrategy = require('./passport/jwt');
 const {router: authRouter} = require('./auth/authRouter');
 
-// const {JWT_SECRET} = process.env;
 const {PORT, DATABASE_URL} = require('./config');
-//routes 
+//routers 
 const itemsRouter = require('./items/itemsRouter');
 const usersRouter = require('./users/usersRouter');
 //middleware
@@ -38,10 +35,8 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 passport.use(localStrategy);
 passport.use(jwtStrategy);
-// CRUD routes for items
+// CRUD routes
 app.use('/items', itemsRouter);
-//CRUD routes for users
-// app.use('/users', usersRouter);
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
 
@@ -49,9 +44,9 @@ const jwtAuth = passport.authenticate('jwt', { session: false });
 
 // A protected endpoint which needs a valid JWT to access it
 app.get('/dashboard', jwtAuth, (req, res) => {
-  return res.json({
-    data: req.user
-  });
+  const loggedUser = req.user;
+  console.log(loggedUser);
+  return res.send({loggedUser});
 });
 
 app.use('*', (req, res) => {

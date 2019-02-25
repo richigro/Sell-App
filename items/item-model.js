@@ -7,7 +7,7 @@ const itemSchema = mongoose.Schema({
     name: {type: String, required: true},
     price: {type: Number, required: true},
     description: {type: String, required: true},
-    seller: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    seller: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
     shortDescription: {type: String, required: true},
     publishedOn: Date
 });
@@ -20,6 +20,7 @@ itemSchema.methods.serialize = function() {
         price:this.price,
         description: this.description,
         shortDescription: this.shortDescription,
+        seller: this.seller,
         publishedAt: this.publishedAt
     }
 };
