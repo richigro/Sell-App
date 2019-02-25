@@ -240,9 +240,11 @@ function postItemForSale() {
         $.ajax({
             type:'POST',
             url: ITEMS_URL,
+            headers: {"Authorization": `Bearer ${localStorage.getItem('userToken')}`},
             data: itemToBePosted,
             success: function(newItem){
                 //reload updated page
+                // console.log(newItem);
                 deleteView();
                 generateAccountPage();
             }
@@ -263,23 +265,40 @@ function displayUserAccount() {
     //get user's entered password
     const username = $(".js-username-login").val();
     const password = $(".js-password-login").val();
-    // console.log({password, username});
-        // $.ajax({
-        //     url: USERS_URL,
-        //     type: 'POST',
-        //     data: {password, username},
-        //     success: function () {
-        //         //delete current view
-        //         deleteView();
-        //         renderView(generateAccountPage());
-        //     },
-        //     error: function () {
-        //         console.log("There was an error handling login");
-        //     }
-        // });
-        deleteView();
-                renderView(generateAccountPage());
+        $.ajax({
+            url: '/auth/login',
+            type: 'POST',
+            data: {password, username},
+            success: function (tokenObject) {
+                // USE returned jwt token to access prtected dashboard endpoint
+                const userToken = tokenObject.authToken;
+                // console.log(userToken);
+                // set user token in local storage
+                localStorage.setItem('userToken', userToken);
+                //run function to access protected dashboard with user token
+                dashboardLoginWithToken(userToken);
+            },
+            error: function () {
+                console.log("There was an error handling login");
+            }
+        });
    });
+}
+
+function dashboardLoginWithToken(token) {
+    $.ajax({
+        url: '',
+        type: 'GET',
+        data: token,
+        success: function () {
+            // if authorized by endpoint load dashboard
+            deleteView();
+            renderView(generateAccountPage());
+        },
+        error: function() {
+            console.log("unable to authenticate with token");
+        }
+    });
 }
 
 function loginToAccount() {

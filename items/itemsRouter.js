@@ -2,6 +2,9 @@
 const express = require('express');
 const router = express.Router();
 const {Item} = require('./item-model');
+const {User} = require('../users/user-model');
+const passport = require('passport');
+const jwtAuth = passport.authenticate('jwt', { session: false });
 
 //GET all items for sale
 router.get('/', (req, res) => {
@@ -31,7 +34,7 @@ router.get('/:id', (req, res) => {
   });
 
 //POST creating new item for sale
-router.post('/', (req, res) => {
+router.post('/',  jwtAuth, (req, res) => {
     // check to see if req.body contains required fields before POST
     const requiredFields = ['price', 'name', 'description', 'image', 'shortDescription'];
     for (let i=0; i<requiredFields.length; i++) {
@@ -42,18 +45,24 @@ router.post('/', (req, res) => {
         return res.status(400).send(message);
       }
     }
-  
-    Item
+    // populate item with seller
+      Item
       .create({
         name: req.body.name,
         price: req.body.price,
         description: req.body.description,
         image: req.body.image,
         shortDescription: req.body.shortDescription,
+        seller: req.user['_id'],
         publishedOn: new Date()
       })
       .then(
-        item => res.status(201).json(item))
+        (item) => {
+        User.find({'_id': req.user['_id']})
+        .populate('seller', "name")
+        .exec();
+        res.status(201).json(item); 
+      })
       .catch( err => {
         console.error(err);
         res.status(500).json({message: 'Internal server error from POST route'});
