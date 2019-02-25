@@ -1,5 +1,6 @@
 'use strict';
 const mongoose = require("mongoose");
+const {Schema} = mongoose;
 
 // Item Schema
 const itemSchema = mongoose.Schema({
@@ -8,7 +9,8 @@ const itemSchema = mongoose.Schema({
     price: {type: Number, required: true},
     description: {type: String, required: true},
     shortDescription: {type: String, required: true},
-    publishedOn: Date
+    publishedOn: {type: Date, default: Date.now },
+    seller: {type: Schema.ObjectId, ref: 'User'}
 });
 
 //Item Method serialize
