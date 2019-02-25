@@ -97,4 +97,19 @@ router.delete('/:id', (req, res) => {
   .catch( err => res.status(500).json({message: "there was an error while deleting the item"}));
 });
 
+//GET all items from a specific user
+router.get('/getLoggedUserItems', jwtAuth, (req, res) => {
+  // const requestedUserId = req.user['_id'];
+  console.log("hi");
+  res.send(200);
+  // Item
+  // .find({"seller": requestedUserId})
+  // .then((itemList) => {
+  //   res.status(200).json(itemList);
+  // })
+  // .catch(err => {
+  //   console.error(err);
+  //   res.send(500)}); 
+});
+
 module.exports = router;

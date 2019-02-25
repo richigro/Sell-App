@@ -44,6 +44,7 @@ const jwtAuth = passport.authenticate('jwt', { session: false });
 
 // A protected endpoint which needs a valid JWT to access it
 app.get('/dashboard', jwtAuth, (req, res) => {
+  console.log(req.token);
   const loggedUser = req.user;
   console.log(loggedUser);
   return res.send({loggedUser});

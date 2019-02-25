@@ -115,6 +115,10 @@ function signupForm() {
         </div>
         <form action="#" class="sign-up-form">
                 <h1 class="sign-up-title-text">Sign Up</h1>
+                <div class="clearfix">
+                    <p>Do you already have an Account? Login here</p>
+                    <button type="submit" class="js-login-page-btn">Log in</button>    
+                </div>
                 <p>Please fill in this form to create an account.</p>
                 <hr>
                 <label for="first-name"><b>First Name</b></label>
@@ -132,10 +136,6 @@ function signupForm() {
                 <p>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
                 <button type="button" class="js-create-user-btn">create user</button>
         </form>
-        <div class="clearfix">
-            <p>Do you already have an Account? Login here</p>
-            <button type="submit" class="js-login-page-btn">Log in</button>    
-        </div>
     </div>
   `;
 }
@@ -165,19 +165,26 @@ function getLoginForm() {
     });
 }
 
-function loadandAppendUserPostedItems() {
+function loadandAppendUserPostedItems(users) {
     $.ajax({
-        url: ITEMS_URL,
+        url: '/items/getLoggedUserItems',
+        data: users,
         success: function(res) {
-            res.items.forEach((item) => $(".js-user-posts").append(`<li id="${item["_id"]}" class="item-preview">
-            <img class="item-image-preview" src="${item.image}" />
-            <p>${item.price}</p>
-            <p>${item.name}</p>
-            <p>${item.shortDescription}</p>
-            <div><button class="js-delete-post">Delete post</button></div>
-            <div><button class="js-edit-post">Edit Post</button></div>
-            </li>
-            `));
+            // filter items into new array that cotain items beloging to logged user only
+            console.log("success");
+            // const userItems = res.items.filter(item => item.seller['_id'] === user['_id']);
+            // console.log(userItems);
+            // userItems.forEach((item) =>{
+            //     $(".js-user-posts").append(`<li id="${item["_id"]}" class="item-preview">
+            //     <img class="item-image-preview" src="${item.image}" />
+            //     <p>${item.price}</p>
+            //     <p>${item.name}</p>
+            //     <p>${item.shortDescription}</p>
+            //     <div><button class="js-delete-post">Delete post</button></div>
+            //     <div><button class="js-edit-post">Edit Post</button></div>
+            //     </li>
+            //     `
+            // });
         }
     });
 }
@@ -203,9 +210,9 @@ function userDashboard() {
     `;
 }
 
-function generateAccountPage() {
+function generateAccountPage(user) {
     renderView(userDashboard());
-    loadandAppendUserPostedItems();
+    loadandAppendUserPostedItems(user);
 }
 
 function newItemForm() {
@@ -248,7 +255,7 @@ function postItemForSale() {
                 //reload updated page
                 // console.log(newItem);
                 deleteCurrentView();
-                generateAccountPage();
+                generateAccountPage(newItem);
             }
         });
     });
@@ -276,7 +283,9 @@ function requestTokenToLogin() {
             success: function (tokenObject) {
                 // USE returned jwt token to access prtected dashboard endpoint
                 const userToken = tokenObject.authToken;
-                // console.log(userToken);
+                //delete old stored token
+                console.log(userToken);
+                localStorage.removeItem('userToken');
                 // set user token in local storage
                 localStorage.setItem('userToken', userToken);
                 //run function to access protected dashboard with user token
@@ -293,25 +302,25 @@ function loginWithToken(token) {
     $.ajax({
         url: '/dashboard',
         type: 'GET',
-        data: token,
+        headers: {"Authorization": `Bearer ${token}`},
         success: function(loggedUser) {
             // if authorized by endpoint load dashboard
-            console.log(loggedUser);
+            // console.log(loggedUser);
             deleteCurrentView();
-            renderView(generateAccountPage());
+            renderView(generateAccountPage(loggedUser));
         },
-        error: function() {
-            console.log("unable to authenticate with token");
+        error: function(err) {
+            console.log(err);
         }
     });
 }
 
-// function loginToAccount() {
-//     $(".js-login-page").on("click", (event) => {
-//         deleteCurrentView();
-//         renderView(signupForm);
-//     });
-// }
+function loadSignupForm() {
+    $(".js-login-page").on("click", (event) => {
+        deleteCurrentView();
+        renderView(signupForm);
+    });
+}
 
 function goToHomePage(){
     $(".js-home-button").on("click", (event) => {
@@ -498,7 +507,7 @@ function app() {
     showItemDetails();
     goToHomePage();
     getLoginForm();
-    //loginToAccount();
+    loadSignupForm();
     requestTokenToLogin();
     postNewItem();
     postItemForSale();
