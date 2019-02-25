@@ -91,21 +91,18 @@ describe('CRUD enpoints for users', function() {
                 expect(res.body.users).to.have.lengthOf.at.least(1);
                 res.body.users.forEach(function(user) {
                     expect(user).to.be.a('object');
-                    expect(user).to.have.all.keys('_id','firstName', 'lastName', 'username', 'password', 'email', '__v');
+                    expect(user).to.have.all.keys('firstName', 'lastName', 'username', 'id');
                 });
                 resUser = res.body.users[0];
-                return User.findById(resUser['_id']);
+                return User.findById(resUser.id);
             })
             .then(function(user) {
-                expect(resUser['_id']).to.equal(user.id);
+                expect(resUser.id).to.equal(user.id);
                 expect(resUser.firstName).to.equal(user.firstName);
                 expect(resUser.lastName).to.equal(user.lastName);
                 expect(resUser.username).to.equal(user.username);
-                expect(resUser.password).to.equal(user.password);
-                expect(resUser.email).to.equal(user.email);
             });
         });
-
     });
     
     // POST endpoint

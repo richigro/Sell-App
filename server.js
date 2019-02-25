@@ -1,23 +1,57 @@
 'use strict';
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const morgan = require("morgan");
+const passport = require('passport');
 const bodyParser = require('body-parser');
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
+
+//destructing and renaming variables
+const localStrategy  = require('./passport/local');
+const jwtStrategy = require('./passport/jwt');
+const {router: authRouter} = require('./auth/authRouter');
+
 const {PORT, DATABASE_URL} = require('./config');
-//routes 
+//routers 
 const itemsRouter = require('./items/itemsRouter');
 const usersRouter = require('./users/usersRouter');
 //middleware
 app.use(morgan('common'));
+//CORS
+app.use(function (req, res, next){
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,PATCH,DELETE');
+  if (req.method === 'OPTIONS') {
+    return res.send(204);
+  }
+  next();
+});
+
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-// CRUD routes for items
+passport.use(localStrategy);
+passport.use(jwtStrategy);
+// CRUD routes
 app.use('/items', itemsRouter);
-//CRUD routes for users
 app.use('/users', usersRouter);
+app.use('/auth', authRouter);
+
+const jwtAuth = passport.authenticate('jwt', { session: false });
+
+// A protected endpoint which needs a valid JWT to access it
+app.get('/dashboard', jwtAuth, (req, res) => {
+  const loggedUser = req.user;
+  console.log(loggedUser);
+  return res.send({loggedUser});
+});
+
+app.use('*', (req, res) => {
+  return res.status(404).json({ message: 'Not Found' });
+});
 
 let server;
 
