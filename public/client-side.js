@@ -168,23 +168,27 @@ function getLoginForm() {
 function loadandAppendUserPostedItems(users) {
     $.ajax({
         url: '/items/getLoggedUserItems',
-        data: users,
-        success: function(res) {
+        type: 'GET',
+        headers: {"Authorization": `Bearer ${localStorage.getItem('userToken')}`},
+        success: function(items) {
             // filter items into new array that cotain items beloging to logged user only
             console.log("success");
             // const userItems = res.items.filter(item => item.seller['_id'] === user['_id']);
-            // console.log(userItems);
-            // userItems.forEach((item) =>{
-            //     $(".js-user-posts").append(`<li id="${item["_id"]}" class="item-preview">
-            //     <img class="item-image-preview" src="${item.image}" />
-            //     <p>${item.price}</p>
-            //     <p>${item.name}</p>
-            //     <p>${item.shortDescription}</p>
-            //     <div><button class="js-delete-post">Delete post</button></div>
-            //     <div><button class="js-edit-post">Edit Post</button></div>
-            //     </li>
-            //     `
-            // });
+            // console.log(res);
+            items.forEach((item) =>{
+                $(".js-user-posts").append(`<li id="${item["_id"]}" class="item-preview">
+                <img class="item-image-preview" src="${item.image}" />
+                <p>${item.price}</p>
+                <p>${item.name}</p>
+                <p>${item.shortDescription}</p>
+                <div><button class="js-delete-post">Delete item</button></div>
+                <div><button class="js-edit-post">Edit item</button></div>
+                </li>
+                `);
+            });
+        },
+        error: function(err) {
+            console.log(err);
         }
     });
 }
@@ -205,14 +209,14 @@ function userDashboard() {
             <ul class="js-user-posts">
             </ul>
         </div>
-        <button class="js-make-a-post"> Make a new post!</button>
+        <button class="js-make-a-post">Post an item for sale</button>
     </div>
     `;
 }
 
-function generateAccountPage(user) {
+function generateAccountPage() {
     renderView(userDashboard());
-    loadandAppendUserPostedItems(user);
+    loadandAppendUserPostedItems();
 }
 
 function newItemForm() {
@@ -307,7 +311,7 @@ function loginWithToken(token) {
             // if authorized by endpoint load dashboard
             // console.log(loggedUser);
             deleteCurrentView();
-            renderView(generateAccountPage(loggedUser));
+            renderView(generateAccountPage());
         },
         error: function(err) {
             console.log(err);

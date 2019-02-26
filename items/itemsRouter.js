@@ -24,6 +24,20 @@ router.get('/', (req, res) => {
         );
   });
 
+//GET all items from a specific user
+router.get('/getLoggedUserItems', jwtAuth, (req, res) => {
+  const requestedUserId = req.user['_id'];
+  console.log(requestedUserId, req.user);
+  Item
+  .find({"seller": requestedUserId})
+  .then((itemList) => {
+    res.status(200).json(itemList);
+  })
+  .catch(err => {
+    console.error(err);
+    res.send(500)}); 
+});  
+
 //GET items for sale by ID
 router.get('/:id', (req, res) => {
     Item
@@ -33,7 +47,7 @@ router.get('/:id', (req, res) => {
       .then((item) => res.json(item))
       .catch( err => {
         console.error(err);
-        res.status(500).json({message: 'Something went wrong while getting item from server or db'});
+        res.status(500).json({message: 'Unable to retrieve item'});
       });
   });
 
@@ -63,7 +77,7 @@ router.post('/',  jwtAuth, (req, res) => {
         (item) => res.status(201).json(item))
       .catch( err => {
         console.error(err);
-        res.status(500).json({message: 'Internal server error from POST route'});
+        res.status(500).json({message: 'Unable to create new item'});
       })
   });
 
@@ -79,12 +93,12 @@ router.put('/:id', (req, res) => {
       })
       .catch( err => {
         console.error(err);
-        res.status(500).json({message: "Error while retriving updated item"});
+        res.status(500).json({message: "Unable to retrieve item to be updated"});
       });
     })
     .catch( err => {
       console.error(err);
-      res.status(500).json({message: "There was an error while retriving the item to be updated"});
+      res.status(500).json({message: "Unable to update item"});
     });
   });
 
@@ -94,22 +108,7 @@ router.delete('/:id', (req, res) => {
   Item
   .findByIdAndRemove(req.params.id)
   .then(() => res.status(204).end())
-  .catch( err => res.status(500).json({message: "there was an error while deleting the item"}));
-});
-
-//GET all items from a specific user
-router.get('/getLoggedUserItems', jwtAuth, (req, res) => {
-  // const requestedUserId = req.user['_id'];
-  console.log("hi");
-  res.send(200);
-  // Item
-  // .find({"seller": requestedUserId})
-  // .then((itemList) => {
-  //   res.status(200).json(itemList);
-  // })
-  // .catch(err => {
-  //   console.error(err);
-  //   res.send(500)}); 
+  .catch( err => res.status(500).json({message: "Could not delete current item"}));
 });
 
 module.exports = router;

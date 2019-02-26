@@ -33,12 +33,12 @@ app.use(function (req, res, next){
 app.use(express.static('public'));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-passport.use(localStrategy);
-passport.use(jwtStrategy);
 // CRUD routes
 app.use('/items', itemsRouter);
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
+passport.use(localStrategy);
+passport.use(jwtStrategy);
 
 const jwtAuth = passport.authenticate('jwt', { session: false });
 
