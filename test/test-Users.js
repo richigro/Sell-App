@@ -120,7 +120,7 @@ describe('CRUD enpoints for users', function() {
                 expect(res).to.have.status(201);
                 expect(res).to.be.json;
                 expect(res.body).to.be.a('object');
-                expect(res.body).to.include.keys('_id', 'firstName', 'lastName', 'username', 'password', 'email');
+                expect(res.body).to.include.keys('id', 'firstName', 'lastName', 'username', 'password', 'email');
                 expect(res.body.firstName).to.equal(newUser.firstName);
                 expect(res.body.lastName).to.equal(newUser.lastName);
                 expect(res.body.username).to.equal(newUser.username);

@@ -11,7 +11,6 @@ const itemSchema = mongoose.Schema({
     seller: {type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true},
     shortDescription: {type: String, required: true},
     publishedOn: {type: Date, default: Date.now },
-    seller: {type: Schema.ObjectId, ref: 'User'}
 });
 
 //Item Method serialize

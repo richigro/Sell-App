@@ -25,12 +25,14 @@ function seedItemData() {
 }
 
 function generateItemData() {
+    const id = mongoose.Types.ObjectId();
     return {
         name: faker.commerce.product(),
         price: faker.commerce.price(),
         image: faker.image.imageUrl(),
         description: faker.lorem.paragraph(),
         shortDescription: faker.lorem.sentence(),
+        seller: id,
         publishedOn: new Date()
     };
 }
@@ -86,7 +88,7 @@ describe('CRUD enpoints for items', function() {
                 expect(res.body.items).to.have.lengthOf.at.least(1);
                 res.body.items.forEach(function(item) {
                     expect(item).to.be.a('object');
-                    expect(item).to.have.all.keys('_id','name', 'description', 'shortDescription', 'image', 'price', 'publishedOn', '__v');
+                    expect(item).to.have.all.keys('_id','name', 'description', 'shortDescription', 'image', 'price', 'publishedOn', '__v', 'seller');
                 });
                 resItem = res.body.items[0];
                 return Item.findById(resItem['_id']);

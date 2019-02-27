@@ -117,7 +117,7 @@ function signupForm() {
                 <h1 class="sign-up-title-text">Sign Up</h1>
                 <div class="clearfix">
                     <p>Do you already have an Account? Login here</p>
-                    <button type="submit" class="js-login-page-btn">Log in</button>    
+                    <button type="submit" class="js-login-btn">Log in</button>    
                 </div>
                 <p>Please fill in this form to create an account.</p>
                 <hr>
@@ -142,7 +142,7 @@ function signupForm() {
 
 function loginForm() {
     return `
-    <div class="js-login-page login-page">
+    <div class="js-signup login-page">
         <div class="js-user-messages-login">
         </div>
         <form class="login-form">
@@ -158,10 +158,19 @@ function loginForm() {
 }
 
 function getLoginForm() {
-    $(".js-app-container").on("click", ".js-login-page-btn", (event) => {
+    $(".js-app-container").on("click", ".js-login-btn", (event) => {
         event.preventDefault();
         deleteCurrentView();
         renderView(loginForm());
+    });
+}
+
+function loginButton (){
+    $(".js-app-container").on("click", ".js-login", (event) => {
+        event.preventDefault();
+        // deleteCurrentView();
+        // renderView(loginForm());
+        console.log('hi');
     });
 }
 
@@ -176,13 +185,14 @@ function loadandAppendUserPostedItems(users) {
             // const userItems = res.items.filter(item => item.seller['_id'] === user['_id']);
             // console.log(res);
             items.forEach((item) =>{
-                $(".js-user-posts").append(`<li id="${item["_id"]}" class="item-preview">
-                <img class="item-image-preview" src="${item.image}" />
-                <p>${item.price}</p>
-                <p>${item.name}</p>
-                <p>${item.shortDescription}</p>
-                <div><button class="js-delete-post">Delete item</button></div>
-                <div><button class="js-edit-post">Edit item</button></div>
+                $(".js-user-posts").append(`
+                <li id="${item["_id"]}" class="item-preview">
+                    <img class="item-image-preview" src="${item.image}" />
+                    <p>${item.price}</p>
+                    <p>${item.name}</p>
+                    <p>${item.shortDescription}</p>
+                    <div><button class="js-delete-post">Delete item</button></div>
+                    <div><button class="js-edit-post">Edit item</button></div>
                 </li>
                 `);
             });
@@ -193,17 +203,19 @@ function loadandAppendUserPostedItems(users) {
     });
 }
 
-function userDashboard() {
+function userDashboard(user) {
+    const numberOfItems = $(".js-user-posts ul li").length;
+    // console.log();
     return `
     <div class="account-page">
         <div class="profile">
-            <img src="#"/>
+            <img class="user-image" src="data:image/jpeg;base64,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"/>
         </div>
         <div class="account-info">
             <h1>Account Information</h1>
-            <p>user name: </p>
-            <p>email: </p>
-            <p>live posts: </p>
+            <p>user name: ${user.loggedUser.username}</p>
+            <p>email: ${user.loggedUser.email}</p>
+            <p>live posts: ${numberOfItems}</p>
         </div>
         <div class="user-posts">
             <ul class="js-user-posts">
@@ -214,8 +226,8 @@ function userDashboard() {
     `;
 }
 
-function generateAccountPage() {
-    renderView(userDashboard());
+function generateAccountPage(user) {
+    renderView(userDashboard(user));
     loadandAppendUserPostedItems();
 }
 
@@ -259,7 +271,7 @@ function postItemForSale() {
                 //reload updated page
                 // console.log(newItem);
                 deleteCurrentView();
-                generateAccountPage(newItem);
+                generateAccountPage();
             }
         });
     });
@@ -309,9 +321,9 @@ function loginWithToken(token) {
         headers: {"Authorization": `Bearer ${token}`},
         success: function(loggedUser) {
             // if authorized by endpoint load dashboard
-            // console.log(loggedUser);
+            console.log(loggedUser);
             deleteCurrentView();
-            renderView(generateAccountPage());
+            renderView(generateAccountPage(loggedUser));
         },
         error: function(err) {
             console.log(err);
@@ -320,7 +332,7 @@ function loginWithToken(token) {
 }
 
 function loadSignupForm() {
-    $(".js-login-page").on("click", (event) => {
+    $(".js-signup").on("click", (event) => {
         deleteCurrentView();
         renderView(signupForm);
     });
@@ -350,8 +362,6 @@ function showItemDetails(){
         deleteCurrentView();
         const itemId = ((event.target).closest("div").id);
         $.ajax({
-            //fix this
-            // fix this
             url: `/items/${itemId}`,
             success: function(res) {
                 renderView(showProductDetails(res));
@@ -485,11 +495,12 @@ function createNewUser() {
             email: $(".js-email").val(),
             password: $(".js-password").val()
         }
+        console.log(newUser);
         // console.log(newUser);
         $.ajax({
             type:'POST',
             url: USERS_URL,
-            data: createDefinedObject(newUser),
+            data: JSON.stringify(createDefinedObject(newUser)),
             success: function(newUser){
                 // console.log(newUser);
                 // return true;
@@ -519,6 +530,7 @@ function app() {
     editItem();
     changeItemValues();
     createNewUser();
+    loginButton();
 }
 
 $(app);
