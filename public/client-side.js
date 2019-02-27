@@ -13,6 +13,10 @@ function deleteCurrentView() {
 }
 
 function getAllItemsForSale() {
+    // clear all previosly saved token in window storage 
+    // user must login again if page is refreshed
+    //optional feature, since session not included
+    // localStorage.clear();
     $.ajax({
         url: ITEMS_URL,
         dataType: 'json',
@@ -92,7 +96,7 @@ function itemContainer(item){
 
 function showProductDetails(item){
     return `
-        <main role="main">
+        <div class="detailed-item-container">
             <h1>${item.name}</h1>
             <p>$${item.price}</p>
             <img src="${item.image}" alt="${item.name}"/>
@@ -104,21 +108,15 @@ function showProductDetails(item){
                 <p>Seller: ${item.seller.username}</p>
                 <p>email: ${item.seller.email}</p>
             </div>
-        </main>
+        </div>
     `;
 }
 
 function signupForm() {
     return `
     <div class="js-sign-up-page">
-        <div class="js-user-messages">
-        </div>
         <form action="#" class="sign-up-form">
                 <h1 class="sign-up-title-text">Sign Up</h1>
-                <div class="clearfix">
-                    <p>Do you already have an Account? Login here</p>
-                    <button type="submit" class="js-login-btn">Log in</button>    
-                </div>
                 <p>Please fill in this form to create an account.</p>
                 <hr>
                 <label for="first-name"><b>First Name</b></label>
@@ -136,6 +134,10 @@ function signupForm() {
                 <p>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
                 <button type="button" class="js-create-user-btn">create user</button>
         </form>
+        <div class="clearfix">
+            <p>Do you already have an Account? Login here</p>
+            <button type="submit" class="js-login-btn login-btn">Log in</button>    
+        </div>
     </div>
   `;
 }
@@ -143,35 +145,33 @@ function signupForm() {
 function loginForm() {
     return `
     <div class="js-signup login-page">
-        <div class="js-user-messages-login">
-        </div>
         <form class="login-form">
             <h1 class="sign-up-title-text">Login</h1>
             <label for="username"><b>Username</b></label>
             <input class="js-username-login" type="text" placeholder="Enter username" name="username" required>
             <label for="password"><b>Password</b></label>
             <input class="js-password-login" type="password" placeholder="Enter Password" name="password" required>
-            <button type="submit" class="js-login-btn">Log in</button>
+            <button type="submit" class="js-request-login login-btn">Log in</button>
         </form>
     </div>
     `;
 }
 
 function getLoginForm() {
-    $(".js-app-container").on("click", ".js-login-btn", (event) => {
+    $("body").on("click", ".js-login-btn", (event) => {
         event.preventDefault();
         deleteCurrentView();
         renderView(loginForm());
     });
 }
 
-function loginButton (){
-    $(".js-app-container").on("click", ".js-login", (event) => {
+function takeToDashboard(){
+    $("body").on("click", ".js-dashboard", (event) => {
         event.preventDefault();
-        // deleteCurrentView();
-        // renderView(loginForm());
-        console.log('hi');
-    });
+        const userToken = localStorage.getItem('userToken');
+        loginWithToken(userToken);
+        }
+    );
 }
 
 function loadandAppendUserPostedItems(users) {
@@ -285,7 +285,7 @@ function postNewItem() {
 }
 
 function requestTokenToLogin() {
-   $(".js-app-container").on("click", ".js-login-btn", (event) => {
+   $(".js-app-container").on("click", ".js-request-login", (event) => {
     event.preventDefault();
     //get user's entered password
     const username = $(".js-username-login").val();
@@ -530,7 +530,8 @@ function app() {
     editItem();
     changeItemValues();
     createNewUser();
-    loginButton();
+    takeToDashboard();
+
 }
 
 $(app);
