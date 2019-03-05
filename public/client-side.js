@@ -22,7 +22,7 @@ function getAllItemsForSale() {
         dataType: 'json',
         success: function(res) {
             res.items.forEach((item) => {
-                renderView(itemContainer(item));
+                $(".js-items-container").append(itemContainer(item));
             });
         },
         error: function(err) {
