@@ -5,7 +5,7 @@ const USERS_URL = '/users';
 
 // appends a view to the app
 function renderView(view){
-    $(".js-app-container").append(view);
+    $(".js-app-container").html(view);
 }
 
 function deleteCurrentView() {
@@ -17,10 +17,12 @@ function getAllItemsForSale() {
     // user must login again if page is refreshed
     //optional feature, since session not included
     // localStorage.clear();
+    
     $.ajax({
         url: ITEMS_URL,
         dataType: 'json',
         success: function(res) {
+            $(".js-app-container").html("<div class='js-items-container'> </div>");
             res.items.forEach((item) => {
                 $(".js-items-container").append(itemContainer(item));
             });
@@ -99,7 +101,7 @@ function showProductDetails(item){
         <div class="detailed-item-container">
             <h1>${item.name}</h1>
             <p>$${item.price}</p>
-            <img src="${item.image}" alt="${item.name}"/>
+            <img class="item-detail-img" src="${item.image}" alt="${item.name}"/>
             <div class="item-description">
                 <p>${item.description}</p>
             </div>
@@ -270,8 +272,11 @@ function postItemForSale() {
             success: function(newItem){
                 //reload updated page
                 // console.log(newItem);
+                // deleteCurrentView();
+                // generateAccountPage();
                 deleteCurrentView();
-                generateAccountPage();
+                // generateAccountPage();
+                loginWithToken(localStorage.getItem('userToken'));
             }
         });
     });
@@ -340,7 +345,7 @@ function loadSignupForm() {
 
 function goToHomePage(){
     $(".js-home-button").on("click", (event) => {
-        deleteCurrentView();
+        $(".js-items-container").empty();
         getAllItemsForSale();
     });
 }
@@ -359,7 +364,8 @@ function findItemById(itemContainer, itemId) {
 
 function showItemDetails(){
     $(".js-app-container").on("click", ".js-item", (event) => {
-        deleteCurrentView();
+        // deleteCurrentView();
+        // $(".js-").empty();
         const itemId = ((event.target).closest("div").id);
         $.ajax({
             url: `/items/${itemId}`,
@@ -381,7 +387,8 @@ function deleteItem() {
             success: function(res) {
                 //reload dashboard
                 deleteCurrentView();
-                generateAccountPage();
+                // generateAccountPage();
+                loginWithToken(localStorage.getItem('userToken'));
             }
         });
     });
@@ -426,11 +433,20 @@ function editItemForm(item) {
             <label for="description">Description</label>
             <input class="text-input-form js-edited-description" id="description" type="text-area" placeholder="${item.description}"/>
             <button type="button" class="js-make-changes">Make Changes</button>
-            <button type="button">Cancel Changes</button>
+            <button class="js-cancel-changes" type="button">Cancel Changes</button>
         </form>
         </section>
     `;
 }
+
+function cancelChanges() {
+    $(".js-app-container").on("click", (event) => {
+        deleteCurrentView();
+        loginWithToken(localStorage.getItem('userToken'));
+    });
+    
+}
+
 
 function createDefinedObject(obj) {
     return Object.keys(obj).reduce((acc, key) => {
@@ -458,7 +474,8 @@ function changeItemValues() {
             data: createDefinedObject(formObject),
             success: function(res){
                 deleteCurrentView();
-                generateAccountPage();
+                // generateAccountPage();
+                loginWithToken(localStorage.getItem('userToken'));
             }
         });
     });
@@ -531,6 +548,7 @@ function app() {
     changeItemValues();
     createNewUser();
     takeToDashboard();
+    cancelChange();
 
 }
 
