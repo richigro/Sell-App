@@ -99,16 +99,16 @@ function itemContainer(item){
 function showProductDetails(item){
     return `
         <div class="detailed-item-container">
-            <h1>${item.name}</h1>
-            <p>$${item.price}</p>
+            <h1 class="detail-item-name">${item.name}</h1>
+            <p class="detail-item-price">$${item.price}</p>
             <img class="item-detail-img" src="${item.image}" alt="${item.name}"/>
-            <div class="item-description">
+            <div class="item-detail-description">
                 <p>${item.description}</p>
             </div>
             <div class="seller-info">
-                <h1>Contact Seller</h1>
-                <p>Seller: ${item.seller.username}</p>
-                <p>email: ${item.seller.email}</p>
+                <h1 class="detail-item-seller-title">Contact Seller</h1>
+                <p class="detail-item-seller-username">Seller: ${item.seller.username}</p>
+                <p class="detail-item-seller-email">Email: ${item.seller.email}</p>
             </div>
         </div>
     `;
