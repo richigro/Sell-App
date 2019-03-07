@@ -13,11 +13,6 @@ function deleteCurrentView() {
 }
 
 function getAllItemsForSale() {
-    // clear all previosly saved token in window storage 
-    // user must login again if page is refreshed
-    //optional feature, since session not included
-    // localStorage.clear();
-    
     $.ajax({
         url: ITEMS_URL,
         dataType: 'json',
@@ -76,15 +71,12 @@ function convertNumberMonthToStringMonth(numberMonth) {
       return month;
 }
 
-
-
 function normalizeIsoDate(isoDate) {
     const numberMonth = new Date(isoDate).getMonth();
     const stringMonth = convertNumberMonthToStringMonth(numberMonth);
     const dayPosted = new Date(isoDate).getDate();
     return `${stringMonth} ${dayPosted} -`;
 }
-
 
 // renders the home page takes data from get enpoint
 function itemContainer(item){
@@ -121,24 +113,24 @@ function signupForm() {
                 <h1 class="sign-up-title-text">Sign Up</h1>
                 <p>Please fill in this form to create an account.</p>
                 <hr>
-                <label for="first-name"><b>First Name</b></label>
-                <input class="js-firstName" type="text" placeholder="name" name="first-name" required>
-                <label for="last-name"><b>Last Name</b></label>
-                <input class="js-lastName" type="text" placeholder="last name" name="last-name" required>
-                <label for="username"><b>Username</b></label>
-                <input class="js-username" type="text" placeholder="Choose a username" name="username" required>
-                <label for="email"><b>Email</b></label>
-                <input class="js-email" type="text" placeholder="Enter Email" name="email" required>
-                <label for="password"><b>Password</b></label>
-                <input class="js-password" type="password" placeholder="Enter Password" name="password" required>
-                <label for="password-repeat"><b>Repeat Password</b></label>
-                <input class="js-repeated-password" type="password" placeholder="Repeat Password" name="password-repeat" required>
-                <p>By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
-                <button type="button" class="js-create-user-btn">create user</button>
+                <label class="label" for="first-name"><b>First Name</b></label>
+                <input class="js-firstName input-field" type="text" placeholder="name" name="first-name" required>
+                <label class="label" for="last-name"><b>Last Name</b></label>
+                <input class="js-lastName input-field" type="text" placeholder="last name" name="last-name" required>
+                <label class="label" for="username"><b>Username</b></label>
+                <input class="js-username input-field" type="text" placeholder="Choose a username" name="username" required>
+                <label class="label" for="email"><b>Email</b></label>
+                <input class="js-email input-field" type="text" placeholder="Enter Email" name="email" required>
+                <label class="label" for="password"><b>Password</b></label>
+                <input class="js-password input-field" type="password" placeholder="Enter Password" name="password" required>
+                <label class="label" for="password-repeat"><b>Repeat Password</b></label>
+                <input class="js-repeated-password input-field" type="password" placeholder="Repeat Password" name="password-repeat" required>
+                <p class="terms-and-cond" >By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
+                <button type="button" class="js-create-user-btn btn green-btn new-acc-btn">Create new Account</button>
         </form>
         <div class="clearfix">
             <p>Do you already have an Account? Login here</p>
-            <button type="submit" class="js-login-btn login-btn">Log in</button>    
+            <button type="submit" class="js-login-btn btn">Log in</button>    
         </div>
     </div>
   `;
@@ -149,11 +141,11 @@ function loginForm() {
     <div class="js-signup login-page">
         <form class="login-form">
             <h1 class="sign-up-title-text">Login</h1>
-            <label for="username"><b>Username</b></label>
-            <input class="js-username-login" type="text" placeholder="Enter username" name="username" required>
-            <label for="password"><b>Password</b></label>
-            <input class="js-password-login" type="password" placeholder="Enter Password" name="password" required>
-            <button type="submit" class="js-request-login login-btn">Log in</button>
+            <label class="label" for="username"><b>Username</b></label>
+            <input class="js-username-login input-field" type="text" placeholder="Enter username" name="username" required>
+            <label class="label" for="password"><b>Password</b></label>
+            <input class="js-password-login input-field" type="password" placeholder="Enter Password" name="password" required>
+            <button type="submit" class="js-request-login btn green-btn login-btn">Log in</button>
         </form>
     </div>
     `;
@@ -183,18 +175,21 @@ function loadandAppendUserPostedItems(users) {
         headers: {"Authorization": `Bearer ${localStorage.getItem('userToken')}`},
         success: function(items) {
             // filter items into new array that cotain items beloging to logged user only
-            console.log("success");
-            // const userItems = res.items.filter(item => item.seller['_id'] === user['_id']);
-            // console.log(res);
             items.forEach((item) =>{
                 $(".js-user-posts").append(`
                 <li id="${item["_id"]}" class="item-preview">
-                    <img class="item-image-preview" src="${item.image}" />
-                    <p>${item.price}</p>
-                    <p>${item.name}</p>
-                    <p>${item.shortDescription}</p>
-                    <div><button class="js-delete-post">Delete item</button></div>
-                    <div><button class="js-edit-post">Edit item</button></div>
+                    <div class="image-container-preview">    
+                        <img class="item-image-preview" src="${item.image}" />
+                    </div>
+                    <div class="item-info-preview">
+                        <p class="item-name-preview">${item.name}</p>
+                        <p class="item-shortDescription-preview" >${item.shortDescription}</p>
+                        <p class="price-preview">$${item.price}</p>
+                    </div>
+                    <div class="item-btns-preview">
+                        <button class="js-delete-post btn delete-btn">Delete item</button>
+                        <button class="js-edit-post btn green-btn edit-btn">Edit item</button>
+                    </div>
                 </li>
                 `);
             });
@@ -207,14 +202,13 @@ function loadandAppendUserPostedItems(users) {
 
 function userDashboard(user) {
     const numberOfItems = $(".js-user-posts ul li").length;
-    // console.log();
     return `
     <div class="account-page">
         <div class="profile">
             <img class="user-image" src="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBw0NDQ0NDg0PDg0NDQ0NDQ0QDQ8NDg0NFREWFhURFhYYHSggGBolGxUVIjUhJTArLy4uGB8zODMtNygtLisBCgoKDg0OFxAQFS0mICUtLS0tLS8tKy0tLS0rLS8tKy0rLS0rLS0tLS0tLS0tLS0rLSstLS0rLS0rLSsrLSsrLf/AABEIAOEA4QMBIgACEQEDEQH/xAAaAAEAAwEBAQAAAAAAAAAAAAAAAQIDBgUE/8QAORAAAgEBBAULAwIGAwAAAAAAAAECAwQRMVEFBhIhQRMiMlJhcXKBkaGxI8HRQrIzYnOi4fBTgpL/xAAZAQEBAQEBAQAAAAAAAAAAAAAAAQMCBAX/xAAfEQEBAQEAAwADAQEAAAAAAAAAAQIRAzFBEiEyUSL/2gAMAwEAAhEDEQA/APdAB6nzggAAQCGECGw2VbKDZDZDZVsIs2ReUbIbAveReUciYpvBN9ybCLXi8h05rGEv/Mim0BreSmZJlkwrRMsmZJlkwNEyyZmmWTCrklUySCSSAFSAAAAABggAAyGBDIbDZVsqDZVsNlGwg2VbIbPZ0ZoW+6ddNLFU8G/Fl3C3hJb6ebZbHVrO6Eb1xk90V5nsWbQEFvqzc31Y82Pri/Y9iMVFJJJJbkkrkkSZ3dbTxye2FGxUYdGlBduym/V7zcA5aBWdOMt0oqS7Un8lgB8FfQ9nn+jYecHd7YHk2vQdWF7pvlI5LdP04+R0oLNWObiVw+9O57mtzT3NMsmdXb9HU665y2Z8Kix880cxbLJUoS2ZrwyXRkuw0musdYuVUy6ZimXTK5aplkzNMsmFXRJVEkEkkEoKAAAQSyGBBDJZVhEMo2WZRlRVspJktno6DsPKz25K+nTa3cJT4L7+g9Enbx9uhNGbKVaouc99OL/Sus+34PZAMrevTJycAARQAAAAAAAAytVnhVg4TV6frF5rtNQBx1tssqE3CXfGXCUczJM6vSdiVem4/rW+m8pZdzOS3ptPc07muKeRrm9efefxrVMujJMuiuWiLIoiyIqyJIAVIAAEEkMCrKssyjKiGZyZdmcgitzbSW9t3JZs7Gw2ZUaUKa4LnPOTxZzmg6O3aI34QTqPvWHu0dUcbvxr4p9AAcNQAAAAAAAAAAAAAOb1hsuxVVRLm1Meyax9Vd7nSHw6bo7dnnnD6i8sfa8ubyudzscsmaIyiaRNXnaIsiiLoKsiSESRQAASVJIAqyrLMqyoozORozOQR7WrEP40/BFe7f2PdPI1ZX0qn9V/tieuZa9vRj+YAAjoAAAAAAAAAAAAACJRUk4vCSafcyQBw6Vzu4rcXiTaVdVqLKpNf3MiJs8rRFkURdBYuiSESiKAAAQWKsCrKssyrKijM5GkjOQR72rMvp1VlUT9Y/4PZOd1aq3VakOvBSXfF/5Z0Rnr238f8gAOXYAAAAAAAAAAAAABAytdXk6VSfVhJrvu3e4HHVZbU5yznJ+rZMTOJpE2eRdF0VRZB1F0SiESiKAACSGCAIZRl2UZUUZnI0kUYcr2K0clWp1OEZc7wvc/Zs7M4SR0+r9s5SlybfPpXLvhwf29Dnc+tfFfj1AAZtgAAAAAAAAAAAAAPI1ktGzSjSWNSV78Md/zd6HrNpJtu5JXtvBLM43SNr5etKf6ejBZQWH58zrM/bPya5GMTSJSJeJqwaIsiqLIjqLokhEoigAAEMkhgQyjLMoyoqyjLszkEUkWslqlRqRqRxWK4SjxTKSM5Fc9d1ZbRCtCNSDvjL1T4p9pqcTozSU7NO9c6EunDPtWTOxstphWgp05bUX6p5NcGZazx6cb/JqADl2AAAAAAAAAHiaa02qd9Ki76mEpreqfYs5fBZOprUk7WesWksbPB/1Wv2fk8GJmmaRNZOR5da/K9aRNImcTRFGiLIoiyIsXRYqiSKkABUEMllWEQyrJbKNlRVspIs2ZyZUVkzORaTFKjOo9mEJTeUU3d35BGMjSyW2rQnt05XPisYyWTXE9Wz6uV575yjTWXTl6Ld7noUdWbOunKdR96hH23+5LqOp49L6O1ho1bo1LqNT+Z8xvslw8z2Ez4aWh7JDChB+JOp+68+ynCMUoxioxWCSSS8kZXnx6M/l9WABHQAAB89sttGgr6tSMclffKXcsWfQZVbNSn06cJ+KEZfIhe/HLaT1hnVvhSTp03ucr/qSXl0fI8eJ21XQtkljQivC5Q+GfFX1YpP8Ah1JweTumvszWazHn14939uaiaRPQtGgLRT3xUai/lfO9H9rzznFxbjJOMlimmmvI67Kzss9tYsvFmUWaRYVqmWRmmXTIrRMsjNMsgqxJUkgqyrJbKNlBso2GykmEQ2KVKdSShCLlJ4JH0WCwztEro7orpTeEV932HVWOx06EdmC8Un0pPtZLrjrOLp5Vh1firpV3tP8A44u6K73iz2qVOMEowioxWCSSRYGdtreZk9AAIoAAAAAAAAAAAAAGNpstOqrqkFJcL8V3PFGwA5u36BlC+VFuceo+mu7P/cTyFll7HdnnaU0VGunKN0avW4T7Jfk7m/8AWWvH9jmUy6ZnUhKEnCScZRdzT4EpnbFsmWTM0yyYVckoAqGyjZZszbCIbNbDZJV6ihHcsZS4RjmYXNtJK9tpJcW8jrtGWJUKaj+t76jzll3Imrx1jP5VvZqEKUFCCuivVvN9poAZPQAAAAAAAAAAAAAAAAAAAAAAAA87TGjlXjtRX1YrmvrLqs5dbtz3Nbmsmdyc/rDYtl8vFbpO6ospcJef+4neL8ZeTP15KZomYxZomdslwReQBDZnJlpMzYR6+rtk25utJc2nuj2zfHyXydGfPYLNyNKFPilzu2T3v3PoMtXtenE5AAEdAAAAAAAAAAAAAAAAAAAAAAAABSvSjUhKEujJNP8AJcAcRVpOnOUJYxk4v8kxZ6ustnunCqsJrYl4lh7fB5EWbS9jy2cvGl4KkgVkfVoWhylohfhD6j8sPe4+OR7urFHm1ambUF5K9/K9Bq8i4ndPcABi9IAAAAAAAAAAAAAAAAAAAAAAAAAAAAA+LTFDlLPUXGK2498d/wAX+pyUWd18HEV6XJ1Jw6k5R8kzTFY+WeqXggg7ZIkdZoSlsWalnJOb/wCzvXtcclI7ijDYhGPVjGPorjjbXxT91cAGbYAAAAAAAAAAAAAAAAAAAAAAAAAAAAADlNP09m0yfXjGftd8pnVnP60Q51GWcZR9Gn92dY9s/JP+XiggGrBaHSj4l8ndMAz228X1AAOGoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHia0dGj4p/CAOs+3O/5rnwAavK/9k="/>
         </div>
         <div class="account-info">
-            <h1>Account Information</h1>
+            <h1 class="account-info-title">Account Information</h1>
             <p>user name: ${user.loggedUser.username}</p>
             <p>email: ${user.loggedUser.email}</p>
             <p>live posts: ${numberOfItems}</p>
@@ -223,7 +217,7 @@ function userDashboard(user) {
             <ul class="js-user-posts">
             </ul>
         </div>
-        <button class="js-make-a-post">Post an item for sale</button>
+        <button class="js-make-a-post btn post-item-for-sale-dashboard">Post an item for sale</button>
     </div>
     `;
 }
@@ -247,8 +241,8 @@ function newItemForm() {
                 <input class="text-input-form" id="shortDescription" type="text"/>
                 <label for="description">Description</label>
                 <input class="text-input-form" id="description" type="text-area"/>
-                <button class="js-post-item">Post for sale</button>
-                <button>Cancel post</button>
+                <button class="js-post-item btn post-form-btns">Post for sale</button>
+                <button class="js-cancel-post btn post-form-btns">Cancel post</button>
             </form>
         </section>
     `;
@@ -270,12 +264,7 @@ function postItemForSale() {
             headers: {"Authorization": `Bearer ${localStorage.getItem('userToken')}`},
             data: itemToBePosted,
             success: function(newItem){
-                //reload updated page
-                // console.log(newItem);
-                // deleteCurrentView();
-                // generateAccountPage();
                 deleteCurrentView();
-                // generateAccountPage();
                 loginWithToken(localStorage.getItem('userToken'));
             }
         });
@@ -304,8 +293,7 @@ function requestTokenToLogin() {
             success: function (tokenObject) {
                 // USE returned jwt token to access prtected dashboard endpoint
                 const userToken = tokenObject.authToken;
-                //delete old stored token
-                console.log(userToken);
+                //delete old stored token, since old token could be expired
                 localStorage.removeItem('userToken');
                 // set user token in local storage
                 localStorage.setItem('userToken', userToken);
@@ -364,8 +352,6 @@ function findItemById(itemContainer, itemId) {
 
 function showItemDetails(){
     $(".js-app-container").on("click", ".js-item", (event) => {
-        // deleteCurrentView();
-        // $(".js-").empty();
         const itemId = ((event.target).closest("div").id);
         $.ajax({
             url: `/items/${itemId}`,
@@ -387,7 +373,6 @@ function deleteItem() {
             success: function(res) {
                 //reload dashboard
                 deleteCurrentView();
-                // generateAccountPage();
                 loginWithToken(localStorage.getItem('userToken'));
             }
         });
@@ -395,7 +380,6 @@ function deleteItem() {
 }
 
 function checkChangedFields(formObject) {
-    // const a = $(".js-name").attr("placeholder");
     const itemFileds = ['name', 'price', 'description', 'shortDescription'];
     const itemsToChange = [];
     if(field != ""){
@@ -432,8 +416,8 @@ function editItemForm(item) {
             <input class="text-input-form js-edited-shortDescription" id="shortDescription" type="text" placeholder="${item.shortDescription}"/>
             <label for="description">Description</label>
             <input class="text-input-form js-edited-description" id="description" type="text-area" placeholder="${item.description}"/>
-            <button type="button" class="js-make-changes">Make Changes</button>
-            <button class="js-cancel-changes" type="button">Cancel Changes</button>
+            <button type="button" class="js-make-changes btn post-form-btns">Make Changes</button>
+            <button type="button" class="js-cancel-changes btn post-form-btns" type="button">Cancel Changes</button>
         </form>
         </section>
     `;
@@ -474,7 +458,6 @@ function changeItemValues() {
             data: createDefinedObject(formObject),
             success: function(res){
                 deleteCurrentView();
-                // generateAccountPage();
                 loginWithToken(localStorage.getItem('userToken'));
             }
         });
@@ -505,6 +488,7 @@ function createNewUser() {
             $(".js-user-messages").append(`<p>Both passwords must match, please try again.</p>`);
             return new Error("passwords do not match");
         }
+
         let newUser = {
             firstName: $(".js-firstName").val(),
             lastName: $(".js-lastName").val(),
@@ -512,15 +496,12 @@ function createNewUser() {
             email: $(".js-email").val(),
             password: $(".js-password").val()
         }
-        console.log(newUser);
-        // console.log(newUser);
+
         $.ajax({
             type:'POST',
             url: USERS_URL,
             data: JSON.stringify(createDefinedObject(newUser)),
             success: function(newUser){
-                // console.log(newUser);
-                // return true;
                 //take to login page
                 deleteCurrentView();
                 renderView(loginForm());
@@ -532,7 +513,6 @@ function createNewUser() {
         });
     });
 }
-
 
 function app() {
     getAllItemsForSale();
@@ -549,7 +529,6 @@ function app() {
     createNewUser();
     takeToDashboard();
     cancelChange();
-
 }
 
 $(app);
