@@ -201,7 +201,6 @@ function loadandAppendUserPostedItems(users) {
 }
 
 function userDashboard(user) {
-    const numberOfItems = $(".js-user-posts ul li").length;
     return `
     <div class="account-page">
         <div class="profile">
@@ -211,7 +210,6 @@ function userDashboard(user) {
             <h1 class="account-info-title">Account Information</h1>
             <p>user name: ${user.loggedUser.username}</p>
             <p>email: ${user.loggedUser.email}</p>
-            <p>live posts: ${numberOfItems}</p>
         </div>
         <div class="user-posts">
             <ul class="js-user-posts">
@@ -231,18 +229,19 @@ function newItemForm() {
     return `
         <section class="post-layout">
             <form class="post-form">
-                <label for="name">Name</label>
-                <input class="text-input-form" id="name" type="text"/>
-                <label for="price">Price</label>
-                <input class="text-input-form" id="price" type="number"/>
-                <label for="image">Image Url</label>
-                <input class="text-input-form" id="image" type="text"/>
-                <label for="shortDescription">Short Description</label>
-                <input class="text-input-form" id="shortDescription" type="text"/>
-                <label for="description">Description</label>
-                <input class="text-input-form" id="description" type="text-area"/>
-                <button class="js-post-item btn post-form-btns">Post for sale</button>
-                <button class="js-cancel-post btn post-form-btns">Cancel post</button>
+                <legend class="post-tip">Enter the information below to post a new item for sale</legend>
+                <label class="label" for="name">Name</label>
+                <input class="text-input-form input-field" id="name" type="text" placeholder="your item's name"/>
+                <label class="label" for="price">Price</label>
+                <input class="text-input-form input-field" id="price" type="number" placeholder="100"/>
+                <label class="label" for="image">Image Url</label>
+                <input class="text-input-form input-field" id="image" type="text" placeholder="A link to your item's image jpeg"/>
+                <label class="label" for="shortDescription">Short Description</label>
+                <input class="text-input-form input-field" id="shortDescription" type="text" placeholder="A brief description of your item"/>
+                <label class="label" for="description">Description</label>
+                <textarea class="text-input-form input-field text-area" id="description" type="text-area" placeholder="A detailed description of your item" /></textarea>
+                <button class="js-cancel-post btn post-form-btns delete-btn">Cancel post</button>
+                <button class="js-post-item btn post-form-btns send-right">Post for sale</button>
             </form>
         </section>
     `;
@@ -413,8 +412,8 @@ function editItemForm(item) {
             <label class="label" for="shortDescription">Short Description</label>
             <input class="text-input-form js-edited-shortDescription input-field" id="shortDescription" type="text" placeholder="${item.shortDescription}"/>
             <label class="label" for="description">Description</label>
-            <input class="text-input-form js-edited-description input-field" id="description" type="text-area" placeholder="${item.description}"/>
-            <button type="button" class="js-cancel-changes btn post-form-btns" type="button">Cancel Changes</button>
+            <textarea class="text-input-form js-edited-description input-field last-field" id="description" type="text-area" placeholder="${item.description}"/></textarea>
+            <button type="button" class="js-cancel-changes btn post-form-btns delete-btn" type="button">Cancel Changes</button>
             <button type="button" class="js-make-changes btn post-form-btns send-right">Make Changes</button>
         </form>
         </section>
