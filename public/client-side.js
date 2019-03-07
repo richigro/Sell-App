@@ -128,9 +128,9 @@ function signupForm() {
                 <p class="terms-and-cond" >By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
                 <button type="button" class="js-create-user-btn btn green-btn new-acc-btn">Create new Account</button>
         </form>
-        <div class="clearfix">
-            <p>Do you already have an Account? Login here</p>
-            <button type="submit" class="js-login-btn btn">Log in</button>    
+        <div class="login-option-box">
+            <p class="already-acc-text">Do you already have an Account? Login here</p>
+            <button type="submit" class="js-login-btn btn login-btn option-btn">Log in</button>    
         </div>
     </div>
   `;
@@ -284,8 +284,6 @@ function requestTokenToLogin() {
     //get user's entered password
     const username = $(".js-username-login").val();
     const password = $(".js-password-login").val();
-    console.log(username);
-    console.log(password);
         $.ajax({
             url: '/auth/login',
             type: 'POST',
@@ -300,8 +298,8 @@ function requestTokenToLogin() {
                 //run function to access protected dashboard with user token
                 loginWithToken(userToken);
             },
-            error: function () {
-                console.log("There was an error handling login");
+            error: function (err) {
+                console.log("There was an error handling login", err);
             }
         });
    });
@@ -314,7 +312,6 @@ function loginWithToken(token) {
         headers: {"Authorization": `Bearer ${token}`},
         success: function(loggedUser) {
             // if authorized by endpoint load dashboard
-            console.log(loggedUser);
             deleteCurrentView();
             renderView(generateAccountPage(loggedUser));
         },
@@ -403,21 +400,22 @@ function editItemForm(item) {
     return `
         <section class="edit-layout" id="">
             <div class="item-image-edit-post">
-                <img class="item-edit" src="${item.image}" id="${item["_id"]}"/>
+                <img class="item-edit-image" src="${item.image}" id="${item["_id"]}"/>
             </div>
         <form class="js-edit-form">
-            <label for="name">Name</label>
-            <input class="text-input-form js-edited-name" id="name" type="text" placeholder="${item.name}"/>
-            <label for="price">Price</label>
-            <input class="text-input-form js-edited-price" id="price" type="number" placeholder="${item.price}"/>
-            <label for="image">Image Url</label>
-            <input class="text-input-form js-edited-image" id="image" type="text" placeholder="${item.image}"/>
-            <label for="shortDescription">Short Description</label>
-            <input class="text-input-form js-edited-shortDescription" id="shortDescription" type="text" placeholder="${item.shortDescription}"/>
-            <label for="description">Description</label>
-            <input class="text-input-form js-edited-description" id="description" type="text-area" placeholder="${item.description}"/>
-            <button type="button" class="js-make-changes btn post-form-btns">Make Changes</button>
+            <p class="edit-tip"> Update your item's information below</p>
+            <label class="label" for="name">Name</label>
+            <input class="text-input-form js-edited-name input-field" id="name" type="text" placeholder="${item.name}"/>
+            <label class="label" for="price">Price</label>
+            <input class="text-input-form js-edited-price input-field" id="price" type="number" placeholder="${item.price}"/>
+            <label class="label" for="image">Image Url</label>
+            <input class="text-input-form js-edited-image input-field" id="image" type="text" placeholder="${item.image}"/>
+            <label class="label" for="shortDescription">Short Description</label>
+            <input class="text-input-form js-edited-shortDescription input-field" id="shortDescription" type="text" placeholder="${item.shortDescription}"/>
+            <label class="label" for="description">Description</label>
+            <input class="text-input-form js-edited-description input-field" id="description" type="text-area" placeholder="${item.description}"/>
             <button type="button" class="js-cancel-changes btn post-form-btns" type="button">Cancel Changes</button>
+            <button type="button" class="js-make-changes btn post-form-btns send-right">Make Changes</button>
         </form>
         </section>
     `;
@@ -483,7 +481,6 @@ function createNewUser() {
         //check to see if both fields for password match
         const password = $(".js-password").val();
         const repeatedPassword = $(".js-repeated-password").val();
-        // console.log(password, repeatedPassword);
         if(password != repeatedPassword){
             $(".js-user-messages").append(`<p>Both passwords must match, please try again.</p>`);
             return new Error("passwords do not match");
@@ -496,17 +493,20 @@ function createNewUser() {
             email: $(".js-email").val(),
             password: $(".js-password").val()
         }
-
+        console.log(newUser);
         $.ajax({
             type:'POST',
             url: USERS_URL,
+            // JSON.stringify(createDefinedObject(newUser))
             data: JSON.stringify(createDefinedObject(newUser)),
             success: function(newUser){
                 //take to login page
+                console.log(newUser);
                 deleteCurrentView();
                 renderView(loginForm());
             },
             error: function(error) {
+                // console.log(error.resposeJSON.message + error.responseJSON.location);
                 $(".js-user-messages").empty();
                 $(".js-user-messages").append(`<p>${error}</p>`);
             }

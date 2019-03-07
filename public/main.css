@@ -229,25 +229,30 @@ body {
      padding: 20px 10px 20px 10px;
      margin: 0 auto;
      margin-top: 5%;
-     border: solid black 1px;
-     /* border-radius:  3%; */
+     border: 3px solid rgba(25, 25, 25, 1);
  }
  .terms-and-cond {
      font-size: 15px;
      text-align: center;
  }
- .new-acc-btn {
-    display: block; 
+ 
+.login-option-box {
     margin: 0 auto;
-    text-align: center;
+    margin-top: 20px;
+    display: block;
+}
+
+ .already-acc-text {
+     text-align: center;
  }
+
 
  .login-form {
     display: block;
     margin: 0 auto;
     margin-top: 10%;
     padding: 20px 10px 20px 10px;
-    border: 3px solid rgba(50, 200, 50, 1);
+    border: 3px solid rgba(25, 25, 25, 1);
     height: 400px;
     width: 80%;
     /* border-radius:  3%; */
@@ -328,6 +333,19 @@ body {
     display: block;
 }
 
+.option-btn {
+ margin-top: 10px;
+ font-size: 16px;
+}
+
+.new-acc-btn {
+    display: block; 
+    margin: 0 auto;
+    margin-top: 7px;
+    text-align: center;
+ }
+
+
 .delete-btn {
     display: inline-block;
     font-size: 15px;
@@ -360,9 +378,7 @@ body {
 }
 
 .edit-btn {
-    /* margin-left: 100px;
-     */
-     float: right;
+    float: right;
     display: inline-block;
 }
 
@@ -386,6 +402,7 @@ body {
 /* items from dashboard preview */
 
 .item-preview{
+    clear: both;
     display: block;
     margin: 0 auto;
     margin-top: 20px;
@@ -401,11 +418,6 @@ body {
     height: 150px;
     width: 40%;
 }
-
-/* .item-image-preview{
-    max-width:100%;
-    max-height:100%;
-} */
 
 .item-info-preview {
     display: inline-block;
@@ -463,4 +475,24 @@ body {
      justify-content: center; 
      max-width: 1000px;
      margin: 0 auto;
+ }
+
+ .item-image-edit-post {
+     display: block;
+     width: 100%;
+ }
+
+ .item-edit-image {
+     width: 100%;
+     height: auto;
+ }
+
+ .edit-tip {
+     margin-top: 10px;
+     text-align: center;
+     font-size: 17px;
+     border-bottom: 1px solid rgba(211, 211, 211, 0.8);
+ }
+ .send-right {
+     float: right;
  }
