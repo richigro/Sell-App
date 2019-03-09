@@ -402,7 +402,7 @@ function editItemForm(item) {
         <section class="edit-layout" id="">
             <h1>Item to be edited</h1>
             <div class="item-image-edit-post">
-                <img alt="image of ${item.name}" class="item-edit-image" src="${item.image}" id="${item["_id"]}"/>
+                <img alt="image of ${item.name}" class="js-item-edit item-edit-image" src="${item.image}" id="${item["_id"]}"/>
             </div>
         <form class="js-edit-form">
             <p class="edit-tip"> Update your item's information below</p>
@@ -450,10 +450,10 @@ function changeItemValues() {
             description: $(".js-edited-description").val(),
             shortDescription: $(".js-edited-shortDescription").val()
         }
-        const itemId = $(".item-edit").attr("id");
+        const itemId = $(".js-item-edit").attr("id");
          // update changed fields with put request
          console.log(itemId);
-         console.log(itemId);
+         console.log(createDefinedObject(formObject));
          $.ajax({
             type: 'PUT',
             url: `/items/${itemId}`,
