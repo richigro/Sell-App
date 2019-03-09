@@ -17,7 +17,7 @@ function getAllItemsForSale() {
         url: ITEMS_URL,
         dataType: 'json',
         success: function(res) {
-            $(".js-app-container").html("<div class='js-items-container'> </div>");
+            $(".js-app-container").html("<div class='js-items-container'><h1 class='hidden'>Home Page</h1></div>");
             res.items.forEach((item) => {
                 $(".js-items-container").append(itemContainer(item));
             });
@@ -83,7 +83,7 @@ function itemContainer(item){
     return `
         <div class="js-item item-container" id=${item['_id']}>
             <div class="item-price-home">$${item.price}</div>
-            <img class="item-image-home" src="${item.image}" />
+            <img alt="item for sale, item name ${item.name}" class="item-image-home" src="${item.image}" />
             <div class="item-info-home">${normalizeIsoDate(item.publishedOn)} ${item.name}</div>
         </div>`;    
 }
@@ -98,7 +98,7 @@ function showProductDetails(item){
                 <p>${item.description}</p>
             </div>
             <div class="seller-info">
-                <h1 class="detail-item-seller-title">Contact Seller</h1>
+                <h2 class="detail-item-seller-title">Contact Seller</h2>
                 <p class="detail-item-seller-username">Seller: ${item.seller.username}</p>
                 <p class="detail-item-seller-email">Email: ${item.seller.email}</p>
             </div>
@@ -111,21 +111,21 @@ function signupForm() {
     <div class="js-sign-up-page">
         <form action="#" class="sign-up-form">
                 <h1 class="sign-up-title-text">Sign Up</h1>
-                <p>Please fill in this form to create an account.</p>
+                <legend>Please fill in this form to create an account.</legend>
                 <hr>
                 <label class="label" for="first-name"><b>First Name</b></label>
-                <input class="js-firstName input-field" type="text" placeholder="name" name="first-name" required>
+                <input id="first-name" class="js-firstName input-field" type="text" placeholder="name" name="first-name" required>
                 <label class="label" for="last-name"><b>Last Name</b></label>
-                <input class="js-lastName input-field" type="text" placeholder="last name" name="last-name" required>
+                <input id="last-name" class="js-lastName input-field" type="text" placeholder="last name" name="last-name" required>
                 <label class="label" for="username"><b>Username</b></label>
-                <input class="js-username input-field" type="text" placeholder="Choose a username" name="username" required>
+                <input id="username" class="js-username input-field" type="text" placeholder="Choose a username" name="username" required>
                 <label class="label" for="email"><b>Email</b></label>
-                <input class="js-email input-field" type="text" placeholder="Enter Email" name="email" required>
+                <input id="email" class="js-email input-field" type="text" placeholder="Enter Email" name="email" required>
                 <label class="label" for="password"><b>Password</b></label>
-                <input class="js-password input-field" type="password" placeholder="Enter Password" name="password" required>
+                <input id="password" class="js-password input-field" type="password" placeholder="Enter Password" name="password" required>
                 <label class="label" for="password-repeat"><b>Repeat Password</b></label>
-                <input class="js-repeated-password input-field" type="password" placeholder="Repeat Password" name="password-repeat" required>
-                <p class="terms-and-cond" >By creating an account you agree to our <a href="#" style="color:dodgerblue">Terms & Privacy</a>.</p>
+                <input id="password-repeat" class="js-repeated-password input-field" type="password" placeholder="Repeat Password" name="password-repeat" required>
+                <p class="terms-and-cond" >By creating an account you agree to our <a href="#" class="terms-cond-link">Terms & Privacy</a>.</p>
                 <button type="button" class="js-create-user-btn btn green-btn new-acc-btn">Create new Account</button>
         </form>
         <div class="login-option-box">
@@ -141,10 +141,11 @@ function loginForm() {
     <div class="js-signup login-page">
         <form class="login-form">
             <h1 class="sign-up-title-text">Login</h1>
+            <legend class="login-tip">Enter your account information to login</legend>
             <label class="label" for="username"><b>Username</b></label>
-            <input class="js-username-login input-field" type="text" placeholder="Enter username" name="username" required>
+            <input id="username" class="js-username-login input-field" type="text" placeholder="Enter username" name="username" required>
             <label class="label" for="password"><b>Password</b></label>
-            <input class="js-password-login input-field" type="password" placeholder="Enter Password" name="password" required>
+            <input id="password" class="js-password-login input-field" type="password" placeholder="Enter Password" name="password" required>
             <button type="submit" class="js-request-login btn green-btn login-btn">Log in</button>
         </form>
     </div>
@@ -179,7 +180,7 @@ function loadandAppendUserPostedItems(users) {
                 $(".js-user-posts").append(`
                 <li id="${item["_id"]}" class="item-preview">
                     <div class="image-container-preview">    
-                        <img class="item-image-preview" src="${item.image}" />
+                        <img alt="item for sale, name of item ${item.name}" class="item-image-preview" src="${item.image}" />
                     </div>
                     <div class="item-info-preview">
                         <p class="item-name-preview">${item.name}</p>
@@ -228,6 +229,7 @@ function generateAccountPage(user) {
 function newItemForm() {
     return `
         <section class="post-layout">
+            <h1>Post a new Item for sale</h1>
             <form class="post-form">
                 <legend class="post-tip">Enter the information below to post a new item for sale</legend>
                 <label class="label" for="name">Name</label>
@@ -398,8 +400,9 @@ function getItemForEdit(itemId){
 function editItemForm(item) {
     return `
         <section class="edit-layout" id="">
+            <h1>Item to be edited</h1>
             <div class="item-image-edit-post">
-                <img class="item-edit-image" src="${item.image}" id="${item["_id"]}"/>
+                <img alt="image of ${item.name}" class="item-edit-image" src="${item.image}" id="${item["_id"]}"/>
             </div>
         <form class="js-edit-form">
             <p class="edit-tip"> Update your item's information below</p>
@@ -449,6 +452,7 @@ function changeItemValues() {
         }
         const itemId = $(".item-edit").attr("id");
          // update changed fields with put request
+         console.log(itemId);
          $.ajax({
             type: 'PUT',
             url: `/items/${itemId}`,
@@ -492,12 +496,16 @@ function createNewUser() {
             email: $(".js-email").val(),
             password: $(".js-password").val()
         }
+
         console.log(newUser);
+        console.log(JSON.stringify((newUser)));
         $.ajax({
-            type:'POST',
-            url: USERS_URL,
-            // JSON.stringify(createDefinedObject(newUser))
-            data: JSON.stringify(createDefinedObject(newUser)),
+            'url': USERS_URL,
+            'method':'POST', 
+            'dataType': 'json', 
+            processData: false, 
+            'contentType': 'application/json', 
+            'data':JSON.stringify(newUser),
             success: function(newUser){
                 //take to login page
                 console.log(newUser);
