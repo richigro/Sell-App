@@ -508,6 +508,8 @@ border-bottom: solid 1px rgba(211, 211, 211, 0.8);
 
  .last-field {
      margin-bottom: 30px;
+     width: 80%;
+     height: 100px;
  }
 
  .post-tip {

@@ -133,7 +133,7 @@ function signupForm() {
                 <label class="label" for="username"><b>Username</b></label>
                 <input id="username" class="js-username input-field" type="text" placeholder="Choose a username" name="username" required>
                 <label class="label" for="email"><b>Email</b></label>
-                <input id="email" class="js-email input-field" type="text" placeholder="Enter Email" name="email" required>
+                <input id="email" class="js-email input-field" type="email" placeholder="Enter Email" name="email" required>
                 <label class="label" for="password"><b>Password</b></label>
                 <input id="password" class="js-password input-field" type="password" placeholder="Enter Password" name="password" required>
                 <label class="label" for="password-repeat"><b>Repeat Password</b></label>
@@ -530,6 +530,7 @@ function createNewUser() {
             },
             error: function(error) {
                 // display error message to user
+                
                 // handleErrorMessage("warning");
                 console.log(error);
             }
