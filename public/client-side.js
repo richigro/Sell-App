@@ -453,6 +453,7 @@ function changeItemValues() {
         const itemId = $(".item-edit").attr("id");
          // update changed fields with put request
          console.log(itemId);
+         console.log(itemId);
          $.ajax({
             type: 'PUT',
             url: `/items/${itemId}`,
