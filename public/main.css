@@ -6,7 +6,6 @@
 
 body {
     height: 100vh;
-    border: 5px solid pink;
     position: relative;
  }
 /* error and success messages
@@ -131,7 +130,6 @@ body {
         height: calc(100% - 115px);
         padding: 10px;
         margin: 0 auto;
-        border: 3px solid green;
         overflow: auto;
 }
 
@@ -267,7 +265,6 @@ body {
     border: 3px solid rgba(25, 25, 25, 1);
     height: 400px;
     width: 80%;
-    /* border-radius:  3%; */
  }
 
  .label {
@@ -428,14 +425,12 @@ border-bottom: solid 1px rgba(211, 211, 211, 0.8);
 
 .image-container-preview {
     display: inline-block;
-    /* border: 2px solid pink; */
     height: 150px;
     width: 40%;
 }
 
 .item-info-preview {
     display: inline-block;
-    /* border: 2px solid red; */
     width: 55%;
     height: 100%;
     margin: 0;
@@ -519,12 +514,10 @@ border-bottom: solid 1px rgba(211, 211, 211, 0.8);
      word-wrap: break-word;
      font-size: 18px;
      margin: 10px 0;
-     /* border: 1px solid black; */
      -webkit-box-shadow: 3px 11px 8px -5px rgba(0,0,0,0.37);
     -moz-box-shadow: 3px 11px 8px -5px rgba(0,0,0,0.37);
     box-shadow: 3px 11px 8px -5px rgba(0,0,0,0.37);
     padding: 15px;
-    /* border-radius: 10%; */
     background-color: #d4d4d4; 
 
  }

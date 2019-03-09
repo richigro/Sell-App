@@ -466,10 +466,12 @@ function changeItemValues() {
         const formObject = {
             name: $(".js-edited-name").val(),
             price: $(".js-edited-price").val(),
+            image: $(".js-edited-image").val(),
             description: $(".js-edited-description").val(),
             shortDescription: $(".js-edited-shortDescription").val()
         }
         const itemId = $(".js-item-edit").attr("id");
+        console.log(createDefinedObject(formObject));
          // update changed fields with put request
          $.ajax({
             type: 'PUT',
