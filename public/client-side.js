@@ -242,7 +242,7 @@ function newItemForm() {
                 <input class="text-input-form input-field" id="shortDescription" type="text" placeholder="A brief description of your item"/>
                 <label class="label" for="description">Description</label>
                 <textarea class="text-input-form input-field text-area" id="description" type="text-area" placeholder="A detailed description of your item" /></textarea>
-                <button class="js-cancel-post btn post-form-btns delete-btn">Cancel post</button>
+                <button class="js-cancel-changes btn post-form-btns delete-btn">Cancel post</button>
                 <button class="js-post-item btn post-form-btns send-right">Post for sale</button>
             </form>
         </section>
@@ -424,14 +424,14 @@ function editItemForm(item) {
 }
 
 function cancelChanges() {
-    $(".js-app-container").on("click", (event) => {
+    $(".js-app-container").on("click", ".js-cancel-changes", (event) => {
         deleteCurrentView();
         loginWithToken(localStorage.getItem('userToken'));
     });
     
 }
 
-
+// takes in an object and checks what keys have been changed and creates new updated object
 function createDefinedObject(obj) {
     return Object.keys(obj).reduce((acc, key) => {
       if(obj[key]){
@@ -452,8 +452,6 @@ function changeItemValues() {
         }
         const itemId = $(".js-item-edit").attr("id");
          // update changed fields with put request
-         console.log(itemId);
-         console.log(createDefinedObject(formObject));
          $.ajax({
             type: 'PUT',
             url: `/items/${itemId}`,
@@ -497,9 +495,6 @@ function createNewUser() {
             email: $(".js-email").val(),
             password: $(".js-password").val()
         }
-
-        console.log(newUser);
-        console.log(JSON.stringify((newUser)));
         $.ajax({
             'url': USERS_URL,
             'method':'POST', 
@@ -509,12 +504,10 @@ function createNewUser() {
             'data':JSON.stringify(newUser),
             success: function(newUser){
                 //take to login page
-                console.log(newUser);
                 deleteCurrentView();
                 renderView(loginForm());
             },
             error: function(error) {
-                // console.log(error.resposeJSON.message + error.responseJSON.location);
                 $(".js-user-messages").empty();
                 $(".js-user-messages").append(`<p>${error}</p>`);
             }
@@ -536,7 +529,7 @@ function app() {
     changeItemValues();
     createNewUser();
     takeToDashboard();
-    cancelChange();
+    cancelChanges();
 }
 
 $(app);
