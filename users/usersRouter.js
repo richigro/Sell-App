@@ -108,10 +108,10 @@ router.get('/:id', (req, res) => {
         code: 422,
         reason: 'ValidationError',
         message: tooSmallField
-          ? `Must be at least ${sizedFields[tooSmallField]
-            .min} characters long`
-          : `Must be at most ${sizedFields[tooLargeField]
-            .max} characters long`,
+          ? `Text Field(s) must be at least ${sizedFields[tooSmallField]
+            .min} character(s) long.`
+          : `Text Field(s) must be at most ${sizedFields[tooLargeField]
+            .max} character(s) long.`,
         location: tooSmallField || tooLargeField
       });
     }
@@ -175,7 +175,7 @@ router.get('/:id', (req, res) => {
       return Promise.reject({
         code: 422,
         reason: 'ValidationError',
-        message: 'Invalid password',
+        message: 'Invalid password or Username',
         location: 'password'
       });
     })

@@ -12,6 +12,18 @@ function deleteCurrentView() {
     $(".js-app-container").empty();
 }
 
+// optional feature not used
+
+// function handleErrorMessage(typeOfError, error) {
+//     //un-hide message container
+//     $(".js-user-messages-container").toggleClass("hidden");
+//     // change class to warning
+//     $(".js-user-messages-container").addClass(typeOfError);
+//     //append error message 
+//     $(".js-user-message").text(`${error.responseJSON.reason} : ${error.responseJSON.message}`);
+//     console.log(`${error.responseJSON.reason} : ${error.responseJSON.message}`);
+// }
+
 function getAllItemsForSale() {
     $.ajax({
         url: ITEMS_URL,
@@ -22,8 +34,9 @@ function getAllItemsForSale() {
                 $(".js-items-container").append(itemContainer(item));
             });
         },
-        error: function(err) {
-            console.log(err, 'no items could be retrived from db');
+        error: function(error) {
+            // handleErrorMessage("error", error);
+            console.log(error);
         }
     });
 }
@@ -195,8 +208,9 @@ function loadandAppendUserPostedItems(users) {
                 `);
             });
         },
-        error: function(err) {
-            console.log(err);
+        error: function(error) {
+            // handleErrorMessage("error", error);
+            console.log(error);
         }
     });
 }
@@ -267,6 +281,9 @@ function postItemForSale() {
             success: function(newItem){
                 deleteCurrentView();
                 loginWithToken(localStorage.getItem('userToken'));
+            },
+            error: function(error) {
+                console.log(error);
             }
         });
     });
@@ -299,8 +316,9 @@ function requestTokenToLogin() {
                 //run function to access protected dashboard with user token
                 loginWithToken(userToken);
             },
-            error: function (err) {
-                console.log("There was an error handling login", err);
+            error: function (error) {
+                // handleErrorMessage("warning", error);
+                console.log(error);
             }
         });
    });
@@ -316,8 +334,9 @@ function loginWithToken(token) {
             deleteCurrentView();
             renderView(generateAccountPage(loggedUser));
         },
-        error: function(err) {
-            console.log(err);
+        error: function(error) {
+            // handleErrorMessage("error", error);
+            console.log(error);
         }
     });
 }
@@ -508,8 +527,9 @@ function createNewUser() {
                 renderView(loginForm());
             },
             error: function(error) {
-                $(".js-user-messages").empty();
-                $(".js-user-messages").append(`<p>${error}</p>`);
+                // display error message to user
+                // handleErrorMessage("warning");
+                console.log(error);
             }
         });
     });
