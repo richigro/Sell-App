@@ -6,7 +6,53 @@ const morgan = require("morgan");
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const mongoose = require("mongoose");
+const nodemailer = require('nodemailer');
 mongoose.Promise = global.Promise;
+
+//testing sending email 
+app.post('/send', (req, res) => {
+  //email response here 
+  const output = `
+  <p>hi ${req.body.name}</p>
+  `;
+   // create reusable transporter object using the default SMTP transport
+   let transporter = nodemailer.createTransport({
+    //your host server
+    host: "smtp.ethereal.email",
+    port: 587,
+    // if using ssl set to true
+    secure: false, // true for 465, false for other ports
+    auth: {
+      user: account.user, // generated ethereal user
+      pass: account.pass // generated ethereal password
+    },
+    tls: {
+      rejectUnauthorized: false
+    }
+  });
+
+  // setup email data with unicode symbols
+  let mailOptions = {
+    from: '"Fred Foo 👻" <foo@example.com>', // sender address
+    to: "bar@example.com, baz@example.com", // list of receivers
+    subject: "Hello ✔", // Subject line
+    text: "Hello world?", // plain text body
+    html: "<b>Hello world?</b>" // html body
+  };
+
+  // send mail with defined transport object
+  let info = await transporter.sendMail(mailOptions)
+
+  console.log("Message sent: %s", info.messageId);
+  // Preview only available when sending through an Ethereal account
+  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+
+  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+  // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+}
+
+
+
 
 //destructing and renaming variables
 const localStrategy  = require('./passport/local');
